@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0F172A" />
+    <title>IPL — Innovation Pitch League | SIES GST × IET Auction Arena</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=JetBrains+Mono:wght@400;600;700;800;900&family=Space+Grotesk:wght@500;600;700;800;900&display=swap" rel="stylesheet" />
+
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/cricket.css" />
+  </head>
+  <body>
+
+    <header class="topbar">
+      <div class="topbar-upper">
+        <a class="brand" href="#stage" aria-label="IPL SIES GST x IET Auction">
+          <div class="brand-crest-box">
+            IPL
+            <div class="brand-crest-badge"></div>
+          </div>
+          <div>
+            <span class="brand-title">SIES GST × IET</span>
+            <span class="brand-sub">LIVE TALENT DRAFT &amp; AUCTION ARENA</span>
+          </div>
+        </a>
+
+        <div class="topbar-right-actions">
+          <span class="pool-badge">₹30K POOL • 8 TEAMS</span>
+          <button class="btn-projector mechanical-btn" id="fullscreen-btn" title="Toggle Fullscreen Projector Mode">
+            ⛶ PROJECTOR
+          </button>
+        </div>
+      </div>
+
+      <div class="topbar-nav-strip">
+        <nav class="role-nav" aria-label="View selector">
+          <a class="role-link active" data-view="stage" href="#stage">
+            <span>📺</span> STAGE PROJECTOR
+          </a>
+          <a class="role-link" data-view="captain" href="#captain">
+            <span>📱</span> CAPTAIN CONSOLE
+          </a>
+          <a class="role-link" data-view="admin" href="#admin">
+            <span>🛠️</span> CONTROL ROOM
+          </a>
+        </nav>
+
+        <div class="top-status-indicator">
+          <span class="status-dot pulse-dot" id="connection-dot"></span>
+          <span id="connection-label">TELEMETRY LINKED</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="cricket-seam-divider"></div>
+
+    <main class="main-viewport">
+
+      <section class="view view-stage active" id="stage-view" data-view-panel="stage">
+
+        <div class="stage-telemetry-ribbon">
+          <div class="telemetry-left">
+            <span class="stage-pill" id="stage-phase">SETUP</span>
+            <span class="stage-round-box">ROUND <b id="stage-round">01</b></span>
+          </div>
+          <div class="telemetry-right">
+            DRAFT PROGRESS: <strong id="stage-progress-text">0 / 36 PLAYERS</strong>
+          </div>
+        </div>
+
+        <div class="stage-main-grid">
+
+          <div class="candidate-spotlight-box">
+            <div>
+              <div class="candidate-top-strip">
+                <span class="tier-badge-brutal" id="stage-tier">TIER 1 ⭐ ELITE</span>
+                <span class="player-id-badge" id="stage-candidate-id">#000</span>
+              </div>
+
+              <h1 class="candidate-name-display" id="stage-candidate-name">
+                WAITING FOR AUCTION
+              </h1>
+
+              <div class="candidate-role-strip">
+                <span class="role-tag-brutal" id="stage-role">🏏 CRICKET PROSPECT</span>
+                <span class="college-tag-brutal" id="stage-college">SIES GST</span>
+              </div>
+            </div>
+
+            <div>
+              <div class="scores-matrix-grid">
+                <div class="score-box-brutal">
+                  <span class="score-box-title">📊 APTITUDE</span>
+                  <div class="score-box-val tabular-nums" id="stage-aptitude">—</div>
+                  <span class="score-box-sub">/ 100 TEST</span>
+                </div>
+
+                <div class="score-box-brutal">
+                  <span class="score-box-title">🗣️ GD SCORE</span>
+                  <div class="score-box-val tabular-nums" id="stage-gd">—</div>
+                  <span class="score-box-sub">/ 100 ROUND</span>
+                </div>
+
+                <div class="score-box-brutal">
+                  <span class="score-box-title">⚡ ELO RATING</span>
+                  <div class="score-box-val text-amber tabular-nums" id="stage-rating">—</div>
+                  <span class="score-box-sub">COMPOSITE PTS</span>
+                </div>
+
+                <div class="score-box-brutal">
+                  <span class="score-box-title">💰 BASE PRICE</span>
+                  <div class="score-box-val text-red tabular-nums" id="stage-base">—</div>
+                  <span class="score-box-sub">OPENING BID</span>
+                </div>
+              </div>
+
+              <div class="skills-tags-row" id="stage-tags">
+                <span class="skill-tag-pill">SYSTEM INITIALIZING</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="stage-bidding-scoreboard">
+            <div>
+              <div class="scoreboard-top">
+                <span class="scoreboard-live-tag">
+                  <span class="pulse-dot" style="display:inline-block; width:6px; height:6px; background:#F59E0B; border-radius:50%;"></span>
+                  <span id="stage-clock-state">AUCTION CLOCK</span>
+                </span>
+                <span class="category-badge" id="stage-frozen-badge" style="background:#000; color:#F59E0B; border-color:#334155;">OPEN</span>
+              </div>
+
+              <div class="countdown-box-brutal" id="stage-timer-box">
+                <div class="countdown-label">GAVEL COUNTDOWN TIMER</div>
+                <div class="countdown-digits tabular-nums" id="stage-clock">00:00</div>
+              </div>
+
+              <div class="bid-telemetry-box">
+                <span class="bid-label-brutal">CURRENT HIGHEST BID</span>
+                <div class="bid-amount-brutal tabular-nums" id="stage-bid">—</div>
+                <div class="bid-leader-pill">
+                  <span>HOLDING:</span>
+                  <strong id="stage-leader">NO BIDS YET</strong>
+                </div>
+              </div>
+
+              <div class="next-bid-row">
+                <span>NEXT MINIMUM BID:</span>
+                <strong class="tabular-nums" id="stage-next-price">—</strong>
+              </div>
+            </div>
+
+            <div class="recent-bids-feed">
+              <div class="feed-title-strip">⚡ BIDDING WAR TELEMETRY</div>
+              <div class="feed-items-list" id="stage-bids-feed">
+                <div class="feed-item-row" style="color:#64748B;">No bids placed on current prospect.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="draft-board-section">
+          <div class="section-head-brutal">
+            <div>
+              <span class="section-tag-brutal">THE DRAFT BOARD</span>
+              <h2 class="section-title-brutal">8 SQUADS // 1 PURSE (10,000 PTS)</h2>
+            </div>
+            <span class="category-badge" style="background:#FFFFFF;">TARGET: 4 PLAYERS / TEAM</span>
+          </div>
+
+          <div class="franchise-cards-grid" id="stage-teams">
+            <div class="franchise-card-brutal">Loading franchise teams...</div>
+          </div>
+        </div>
+
+        <div class="upcoming-queue-strip">
+          <div class="queue-title-brutal">⏭️ ON DECK / UPCOMING PROSPECTS</div>
+          <div class="upcoming-chips-container" id="stage-upcoming">
+            <div class="upcoming-chip-box">No more queued players.</div>
+          </div>
+        </div>
+
+      </section>
+
+      <section class="view view-captain" id="captain-view" data-view-panel="captain">
+        <div class="captain-view-wrapper">
+          <div class="view-header-banner">
+            <div>
+              <span class="section-tag-brutal">CAPTAIN DRAFT CONSOLE</span>
+              <h1>BUILD YOUR SQUAD</h1>
+            </div>
+            <span class="view-status-chip" id="captain-connection">NOT SIGNED IN</span>
+          </div>
+
+          <div class="brutalist-card-center" id="captain-login-card">
+            <h2 class="card-title-lg">CAPTAIN AUTHENTICATION</h2>
+            <p class="card-desc-sm">Enter your assigned Team ID and private login code to access live bidding.</p>
+
+            <form id="captain-login-form" class="brutalist-form">
+              <div>
+                <label class="form-label-brutal" for="captain-team-id">SELECT FRANCHISE</label>
+                <select required name="team_id" id="captain-team-id" class="select-brutal">
+                  <option value="" disabled selected>Select your team...</option>
+                  <option value="1">1 // Mumbai Super Strikers</option>
+                  <option value="2">2 // Chennai Super Kings</option>
+                  <option value="3">3 // Bangalore Challengers</option>
+                  <option value="4">4 // Kolkata Knight Riders</option>
+                  <option value="5">5 // Delhi Capitals</option>
+                  <option value="6">6 // Rajasthan Royals</option>
+                  <option value="7">7 // Gujarat Titans</option>
+                  <option value="8">8 // Sunrisers Hyderabad</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="form-label-brutal" for="captain-login-code">LOGIN ACCESS CODE</label>
+                <input required name="login_code" id="captain-login-code" type="password" placeholder="e.g. mumbai11" class="input-brutal" />
+              </div>
+
+              <div class="quick-fill-chips">
+                <span style="font-family:var(--font-mono); font-size:10px; color:#64748B;">Test Quick-Fill:</span>
+                <button type="button" class="quick-chip mechanical-btn" data-quick-team="1" data-quick-code="mumbai11">Mumbai (1)</button>
+                <button type="button" class="quick-chip mechanical-btn" data-quick-team="2" data-quick-code="chennai22">Chennai (2)</button>
+                <button type="button" class="quick-chip mechanical-btn" data-quick-team="3" data-quick-code="bengaluru33">Bangalore (3)</button>
+              </div>
+
+              <button class="btn-brutal btn-amber btn-block mechanical-btn" type="submit">
+                ENTER AUCTION ARENA ➔
+              </button>
+            </form>
+            <p class="form-msg-box" id="captain-login-message"></p>
+          </div>
+
+          <div class="captain-dashboard-grid" id="captain-console" hidden>
+
+            <div class="captain-candidate-card">
+              <div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:10px; font-family:var(--font-mono); font-size:11px;">
+                  <span class="category-badge" id="captain-phase" style="background:var(--stadium-ink); color:#FFF;">LIVE BIDDING</span>
+                  <span id="captain-round" style="font-weight:800;">ROUND 01</span>
+                </div>
+
+                <span class="tier-badge-brutal" id="captain-tier">T1</span>
+                <h2 class="captain-player-title" id="captain-candidate">WAITING FOR AUCTION</h2>
+                <div id="captain-tags" style="margin-bottom:14px;"></div>
+
+                <div class="scores-matrix-grid" style="margin-bottom:16px;">
+                  <div class="score-box-brutal">
+                    <span class="score-box-title">APTITUDE</span>
+                    <strong class="score-box-val tabular-nums" id="captain-aptitude">—</strong>
+                  </div>
+                  <div class="score-box-brutal">
+                    <span class="score-box-title">GD SCORE</span>
+                    <strong class="score-box-val tabular-nums" id="captain-gd">—</strong>
+                  </div>
+                  <div class="score-box-brutal">
+                    <span class="score-box-title">RATING</span>
+                    <strong class="score-box-val text-amber tabular-nums" id="captain-rating">—</strong>
+                  </div>
+                  <div class="score-box-brutal">
+                    <span class="score-box-title">BASE PRICE</span>
+                    <strong class="score-box-val text-red tabular-nums" id="captain-base">—</strong>
+                  </div>
+                </div>
+
+                <div class="verdict-banner-brutal" id="captain-verdict-banner">
+                  <span id="captain-verdict-text">Waiting for next player...</span>
+                </div>
+              </div>
+
+              <div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-family:var(--font-mono); font-size:12px; font-weight:800;">
+                  <span>NEXT VALID BID:</span>
+                  <strong class="tabular-nums" id="captain-next-bid" style="color:var(--stadium-ctaRed); font-size:16px;">—</strong>
+                </div>
+
+                <button class="btn-bid-giant mechanical-btn" id="captain-bid-button" disabled>
+                  <span class="bid-action-title">PLACE SERVER-VALIDATED BID</span>
+                  <strong class="bid-action-amount tabular-nums" id="captain-bid-price">—</strong>
+                </button>
+                <p class="form-msg-box text-center" id="captain-bid-message"></p>
+              </div>
+            </div>
+
+            <div class="captain-side-panel">
+
+              <div class="side-card-brutal">
+                <div style="display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:11px; font-weight:800;">
+                  <span>AVAILABLE PURSE</span>
+                  <span id="captain-team-name" style="color:var(--stadium-amberDark);">MY TEAM</span>
+                </div>
+                <div class="purse-box-digits tabular-nums" id="captain-purse">10,000 PTS</div>
+                <div style="font-family:var(--font-mono); font-size:11px; border-top:1px solid #E2E8F0; padding-top:8px; display:flex; justify-content:space-between;">
+                  <span>MAX ALLOWABLE BID:</span>
+                  <strong class="tabular-nums" id="captain-max-bid">9,700 PTS</strong>
+                </div>
+              </div>
+
+              <div class="side-card-brutal">
+                <div style="display:flex; justify-content:space-between; align-items:center; font-family:var(--font-mono); font-size:12px; font-weight:800;">
+                  <span>YOUR SQUAD</span>
+                  <span class="category-badge" id="captain-roster-count">0 / 4</span>
+                </div>
+                <div class="roster-list-brutal" id="captain-roster">
+                  <div style="font-family:var(--font-mono); font-size:11px; color:#64748B; padding:12px 0;">No players signed yet.</div>
+                </div>
+                <button class="btn-brutal btn-white btn-block mechanical-btn" id="captain-logout" style="margin-top:12px;">
+                  SIGN OUT CONSOLE
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="view view-admin" id="admin-view" data-view-panel="admin">
+        <div class="admin-view-wrapper">
+          <div class="view-header-banner">
+            <div>
+              <span class="section-tag-brutal">AUCTIONEER COMMAND CENTER</span>
+              <h1>RUN THE ROOM</h1>
+            </div>
+            <span class="view-status-chip" id="admin-connection">PIN REQUIRED</span>
+          </div>
+
+          <div class="brutalist-card-center" id="admin-login-card">
+            <h2 class="card-title-lg">AUCTIONEER AUTHENTICATION</h2>
+            <p class="card-desc-sm">Enter the secret Admin Master PIN to unlock live auctioneer controls.</p>
+
+            <form id="admin-login-form" class="brutalist-form">
+              <div>
+                <label class="form-label-brutal" for="admin-pin-input">MASTER ADMIN PIN</label>
+                <input required name="pin" id="admin-pin-input" type="password" placeholder="ENTER ADMIN PIN..." class="input-brutal" />
+              </div>
+
+              <div class="quick-fill-chips">
+                <button type="button" class="quick-chip mechanical-btn" id="admin-quick-pin">Fill Dev PIN</button>
+              </div>
+
+              <button class="btn-brutal btn-amber btn-block mechanical-btn" type="submit">
+                UNLOCK CONTROLS ➔
+              </button>
+            </form>
+            <p class="form-msg-box" id="admin-login-message"></p>
+          </div>
+
+          <div class="admin-deck-content" id="admin-console" hidden>
+
+            <div class="admin-metrics-row">
+              <div class="metric-card-brutal">
+                <span class="metric-label-brutal">PHASE</span>
+                <strong class="metric-val-brutal" id="admin-phase">SETUP</strong>
+              </div>
+              <div class="metric-card-brutal">
+                <span class="metric-label-brutal">TIMER</span>
+                <strong class="metric-val-brutal tabular-nums" id="admin-clock">00:00</strong>
+              </div>
+              <div class="metric-card-brutal">
+                <span class="metric-label-brutal">ROUND</span>
+                <strong class="metric-val-brutal" id="admin-round">01</strong>
+              </div>
+              <div class="metric-card-brutal">
+                <span class="metric-label-brutal">MODE</span>
+                <strong class="metric-val-brutal" id="admin-mode">AUTO</strong>
+              </div>
+              <div class="metric-card-brutal">
+                <span class="metric-label-brutal">DRAFTED</span>
+                <strong class="metric-val-brutal" id="admin-stats-sold">0 / 36</strong>
+              </div>
+            </div>
+
+            <div class="admin-grid-columns">
+
+              <div class="admin-action-deck">
+                <div class="deck-title-strip">
+                  <span class="deck-title-text">AUCTION CONTROLS</span>
+                  <span class="category-badge">ADMIN</span>
+                </div>
+
+                <div class="action-btns-grid">
+                  <button class="btn-admin-action btn-green mechanical-btn" data-admin-action="start">START AUCTION ▶</button>
+                  <button class="btn-admin-action mechanical-btn" data-admin-action="next">NEXT PLAYER ➔</button>
+                  <button class="btn-admin-action mechanical-btn" data-admin-action="pause">PAUSE CLOCK ⏸</button>
+                  <button class="btn-admin-action mechanical-btn" data-admin-action="resume">RESUME CLOCK ▶</button>
+                  <button class="btn-admin-action mechanical-btn" data-admin-action="extend" data-seconds="10">+10s EXTEND</button>
+                  <button class="btn-admin-action mechanical-btn" data-admin-action="extend" data-seconds="30">+30s EXTEND</button>
+                  <button class="btn-admin-action mechanical-btn" data-admin-action="undo">UNDO BID ↩</button>
+                  <button class="btn-admin-action btn-amber mechanical-btn" data-admin-action="confirm">CONFIRM SALE 🔨</button>
+                  <button class="btn-admin-action btn-red mechanical-btn" data-admin-action="unsold">MARK UNSOLD ✖</button>
+                  <button class="btn-admin-action btn-red mechanical-btn" data-admin-action="freeze">FREEZE BIDS ❄</button>
+                  <button class="btn-admin-action mechanical-btn" id="btn-toggle-manual">TOGGLE MANUAL ⚙</button>
+                </div>
+                <p class="form-msg-box" id="admin-action-message"></p>
+
+                <div class="admin-tool-box">
+                  <span class="admin-tool-title">🎯 JUMP TO SPECIFIC CANDIDATE</span>
+                  <div style="display:flex; gap:8px;">
+                    <select id="admin-jump-select" class="select-brutal"></select>
+                    <button class="btn-brutal btn-amber mechanical-btn" id="btn-admin-jump">LOAD</button>
+                  </div>
+                </div>
+
+                <div class="admin-tool-box">
+                  <span class="admin-tool-title">🙋‍♂️ PROXY / SUBSTITUTE BID (OFFLINE PADDLE)</span>
+                  <div style="display:flex; gap:8px;">
+                    <select id="admin-proxy-team" class="select-brutal" style="flex:1;">
+                      <option value="1">Mumbai (1)</option>
+                      <option value="2">Chennai (2)</option>
+                      <option value="3">Bangalore (3)</option>
+                      <option value="4">Kolkata (4)</option>
+                      <option value="5">Delhi (5)</option>
+                      <option value="6">Rajasthan (6)</option>
+                      <option value="7">Gujarat (7)</option>
+                      <option value="8">Hyderabad (8)</option>
+                    </select>
+                    <input type="number" id="admin-proxy-price" placeholder="Price..." class="input-brutal" style="flex:1;" />
+                    <button class="btn-brutal mechanical-btn" id="btn-admin-proxy-bid">BID</button>
+                  </div>
+                </div>
+
+                <div class="admin-tool-box" style="border-color:var(--stadium-ctaRed); background:#FEF2F2;">
+                  <span class="admin-tool-title" style="color:var(--stadium-ctaRed);">🔄 RESET AUCTION &amp; RELOAD CSV</span>
+                  <button class="btn-brutal btn-red btn-block mechanical-btn" id="btn-admin-reset">
+                    RESET AUCTION (FRESH REPLAY)
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <div class="admin-side-card">
+                  <div class="deck-title-strip">
+                    <span class="deck-title-text">CURRENT PLAYER</span>
+                    <span id="admin-current-id">#—</span>
+                  </div>
+                  <h3 style="font-family:var(--font-sans); font-weight:900; font-size:1.4rem; text-transform:uppercase; margin-bottom:12px;" id="admin-candidate">
+                    WAITING FOR AUCTION
+                  </h3>
+                  <div style="font-family:var(--font-mono); font-size:11px; display:flex; flex-direction:column; gap:6px;">
+                    <div style="display:flex; justify-content:space-between; background:#F8FAFC; padding:6px 10px; border:1px solid var(--stadium-ink);">
+                      <span>HIGH BID:</span>
+                      <strong class="tabular-nums" id="admin-bid">—</strong>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; background:#F8FAFC; padding:6px 10px; border:1px solid var(--stadium-ink);">
+                      <span>LEADER:</span>
+                      <strong id="admin-leader">—</strong>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="admin-side-card">
+                  <div class="deck-title-strip">
+                    <span class="deck-title-text">SETUP INTEGRITY</span>
+                    <span class="category-badge" id="setup-status">CHECKING</span>
+                  </div>
+                  <div id="setup-health" style="font-family:var(--font-mono); font-size:11px; display:flex; flex-direction:column; gap:6px;"></div>
+                </div>
+
+                <div class="admin-side-card">
+                  <div class="deck-title-strip">
+                    <span class="deck-title-text">EXPORT AUDIT DATA (CSV)</span>
+                  </div>
+                  <div style="display:flex; flex-direction:column; gap:8px;">
+                    <a href="/api/admin/export/bids.csv" class="btn-brutal btn-white btn-block mechanical-btn" target="_blank">
+                      📄 DOWNLOAD BIDS CSV
+                    </a>
+                    <a href="/api/admin/export/squads.csv" class="btn-brutal btn-white btn-block mechanical-btn" target="_blank">
+                      🏆 DOWNLOAD SQUADS CSV
+                    </a>
+                    <a href="/api/admin/export/admin-actions.csv" class="btn-brutal btn-white btn-block mechanical-btn" target="_blank">
+                      ⚖️ DOWNLOAD ADMIN ACTIONS CSV
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div>
+        <strong>SIES GST × IET AUCTION PLATFORM</strong> // THE LIVE DRAFT
+      </div>
+      <div>
+        SERVER IS THE ONLY REFEREE // FASTAPI + WEBSOCKET
+      </div>
+    </footer>
+
+    <script src="/app.js" defer></script>
+  </body>
+</html>

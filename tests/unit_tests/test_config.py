@@ -23,8 +23,8 @@ class ConfigTests(unittest.TestCase):
         self.assertEqual(cfg.round_drop, 0.5)
         self.assertEqual(cfg.max_rounds, 5)
 
-        self.assertEqual(cfg.preview_seconds, 30)
-        self.assertEqual(cfg.bid_seconds, 30)
+        self.assertEqual(cfg.preview_seconds, 0)
+        self.assertEqual(cfg.bid_seconds, 120)
         self.assertEqual(cfg.result_seconds, 8)
         self.assertEqual(cfg.anti_snipe_seconds, 8)
         self.assertEqual(cfg.undo_extend_seconds, 10)

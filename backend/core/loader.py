@@ -111,8 +111,18 @@ def load_candidates(path: str) -> List[Dict[str, Any]]:
         profile = {
             k: v
             for k, v in row.items()
-            if k not in CORE_CANDIDATE_COLUMNS and v not in ("", None)
+            if k not in REQUIRED_CANDIDATE_COLUMNS and v not in ("", None)
         }
+        if "aptitude" in row and row["aptitude"] not in ("", None):
+            try:
+                profile["aptitude"] = int(float(str(row["aptitude"]).strip()))
+            except Exception:
+                profile["aptitude"] = row["aptitude"]
+        if "gd" in row and row["gd"] not in ("", None):
+            try:
+                profile["gd"] = int(float(str(row["gd"]).strip()))
+            except Exception:
+                profile["gd"] = row["gd"]
 
         candidates.append(
             {

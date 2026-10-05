@@ -21,11 +21,11 @@ class NextPlayerRequest(BaseModel):
 
 
 class FreezeRequest(BaseModel):
-    on: bool = True
+    on: Optional[bool] = None
 
 
 class ExtendRequest(BaseModel):
-    seconds: float
+    seconds: float = 10.0
 
 
 class ResetTimerRequest(BaseModel):
@@ -33,7 +33,7 @@ class ResetTimerRequest(BaseModel):
 
 
 class ManualModeRequest(BaseModel):
-    on: bool
+    on: Optional[bool] = None
 
 
 class PurseEditRequest(BaseModel):

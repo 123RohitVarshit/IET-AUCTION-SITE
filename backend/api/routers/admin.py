@@ -1,6 +1,6 @@
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Body, Depends, HTTPException
 
 from ..deps import get_state, require_admin
 from ..schemas import (
@@ -17,6 +17,30 @@ from ...realtime.sync import sync_all
 
 
 router = APIRouter()
+
+
+@router.get("/api/admin/auth/check")
+def admin_auth_check(_=Depends(require_admin)):
+    return {"ok": True}
+
+
+@router.get("/api/admin/candidates")
+def get_candidates(state=Depends(get_state), _=Depends(require_admin)):
+    with state.auction.lock:
+        return [
+            {
+                "id": c.id,
+                "name": c.name,
+                "tier": c.tier,
+                "rating": c.rating,
+                "base_price": c.base_price,
+                "status": c.status,
+                "sold_to": c.sold_to,
+                "sold_price": c.sold_price,
+                "profile": c.profile,
+            }
+            for c in state.auction.cands.values()
+        ]
 
 
 async def commit_admin_action(state, action: str, payload: dict, fn):
@@ -49,7 +73,7 @@ async def admin_start(state=Depends(get_state), _=Depends(require_admin)):
 
 @router.post("/api/admin/next")
 async def admin_next(
-    payload: Optional[NextPlayerRequest] = None,
+    payload: Optional[NextPlayerRequest] = Body(default=None),
     state=Depends(get_state),
     _=Depends(require_admin),
 ):
@@ -85,57 +109,61 @@ async def admin_resume(state=Depends(get_state), _=Depends(require_admin)):
 
 @router.post("/api/admin/freeze")
 async def admin_freeze(
-    payload: FreezeRequest,
+    payload: Optional[FreezeRequest] = Body(default=None),
     state=Depends(get_state),
     _=Depends(require_admin),
 ):
+    on = payload.on if (payload and payload.on is not None) else not state.auction.frozen
     return await commit_admin_action(
         state,
         "freeze",
-        {"on": payload.on},
-        lambda: state.auction.freeze(payload.on),
+        {"on": on},
+        lambda: state.auction.freeze(on),
     )
 
 
 @router.post("/api/admin/extend")
 async def admin_extend(
-    payload: ExtendRequest,
+    payload: Optional[ExtendRequest] = Body(default=None),
     state=Depends(get_state),
     _=Depends(require_admin),
 ):
+    seconds = payload.seconds if (payload and payload.seconds is not None) else 10.0
     return await commit_admin_action(
         state,
         "extend",
-        {"seconds": payload.seconds},
-        lambda: state.auction.extend(payload.seconds),
+        {"seconds": seconds},
+        lambda: state.auction.extend(seconds),
     )
 
 
 @router.post("/api/admin/reset-timer")
 async def admin_reset_timer(
-    payload: ResetTimerRequest,
+    payload: Optional[ResetTimerRequest] = Body(default=None),
     state=Depends(get_state),
     _=Depends(require_admin),
 ):
+    seconds = payload.seconds if payload else None
     return await commit_admin_action(
         state,
         "reset_timer",
-        {"seconds": payload.seconds},
-        lambda: state.auction.reset_timer(payload.seconds),
+        {"seconds": seconds},
+        lambda: state.auction.reset_timer(seconds),
     )
 
 
 @router.post("/api/admin/set-manual-mode")
 async def admin_set_manual_mode(
-    payload: ManualModeRequest,
+    payload: Optional[ManualModeRequest] = Body(default=None),
     state=Depends(get_state),
     _=Depends(require_admin),
 ):
+    on = payload.on if (payload and payload.on is not None) else not state.auction.manual_mode
     return await commit_admin_action(
         state,
         "set_manual_mode",
-        {"on": payload.on},
-        lambda: state.auction.set_manual_mode(payload.on),
+        {"on": on},
+        lambda: state.auction.set_manual_mode(on),
     )
 
 
@@ -244,21 +272,61 @@ async def admin_substitute_bid(
 
 @router.post("/api/admin/set-times")
 async def admin_set_times(
-    payload: SetTimesRequest,
+    payload: Optional[SetTimesRequest] = Body(default=None),
     state=Depends(get_state),
     _=Depends(require_admin),
 ):
+    preview = payload.preview if payload else None
+    bid = payload.bid if payload else None
+    result = payload.result if payload else None
     return await commit_admin_action(
         state,
         "set_times",
         {
-            "preview": payload.preview,
-            "bid": payload.bid,
-            "result": payload.result,
+            "preview": preview,
+            "bid": bid,
+            "result": result,
         },
         lambda: state.auction.set_times(
-            preview=payload.preview,
-            bid=payload.bid,
-            result=payload.result,
+            preview=preview,
+            bid=bid,
+            result=result,
         ),
     )
+
+
+@router.post("/api/admin/reset")
+async def admin_reset(
+    state=Depends(get_state),
+    _=Depends(require_admin),
+):
+    from pathlib import Path
+    from ...core.auction import Auction
+    from ...core.config import Config
+    from ...core.loader import load_candidates, load_teams
+
+    data_dir = Path("data")
+    teams_path = data_dir / "teams.csv"
+    rated_path = data_dir / "rated.csv"
+
+    teams = load_teams(str(teams_path)) if teams_path.exists() else []
+    candidates = load_candidates(str(rated_path)) if rated_path.exists() else []
+
+    state.store.clear_state()
+
+    cfg = Config()
+    state.cfg = cfg
+    state.auction = Auction(cfg=cfg, teams=teams, candidates=candidates)
+    state.team_tokens.clear()
+    state.team_logins = {team["id"]: team["login_code"] for team in teams}
+
+    state.store.log_admin_action("reset_auction", {"teams_count": len(teams), "candidates_count": len(candidates)})
+    state.store.save_state(state.auction.to_dict())
+
+    await sync_all(state)
+
+    return {
+        "ok": True,
+        "action": "reset",
+        "message": f"Auction reset successfully. Loaded {len(teams)} teams and {len(candidates)} candidates.",
+    }

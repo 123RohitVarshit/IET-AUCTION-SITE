@@ -36,9 +36,8 @@ class Config:
     round_drop: float = 0.5
     max_rounds: int = 5
 
-    # Timings
-    preview_seconds: float = 30.0
-    bid_seconds: float = 30.0
+    preview_seconds: float = 0.0
+    bid_seconds: float = 120.0
     result_seconds: float = 8.0
     anti_snipe_seconds: float = 8.0
     undo_extend_seconds: float = 10.0

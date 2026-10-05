@@ -1,0 +1,30 @@
+:fullscreen .topbar, :-webkit-full-screen .topbar {
+  display: none;
+}
+
+:fullscreen .main-viewport, :-webkit-full-screen .main-viewport {
+  max-width: 100vw;
+  padding: 16px 28px;
+  height: 100vh;
+}
+
+:fullscreen .candidate-name-display, :-webkit-full-screen .candidate-name-display {
+  font-size: 4.5rem;
+}
+
+:fullscreen .countdown-digits, :-webkit-full-screen .countdown-digits {
+  font-size: 6rem;
+}
+
+:fullscreen .bid-amount-brutal, :-webkit-full-screen .bid-amount-brutal {
+  font-size: 4.5rem;
+}
+
+.team-border-1 { border-left: 6px solid #004ba0 !important; }
+.team-border-2 { border-left: 6px solid #fdb913 !important; }
+.team-border-3 { border-left: 6px solid #d11a2a !important; }
+.team-border-4 { border-left: 6px solid #3a225d !important; }
+.team-border-5 { border-left: 6px solid #0078bc !important; }
+.team-border-6 { border-left: 6px solid #ea1a85 !important; }
+.team-border-7 { border-left: 6px solid #00f0ff !important; }
+.team-border-8 { border-left: 6px solid #f26522 !important; }
