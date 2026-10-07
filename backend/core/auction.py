@@ -793,11 +793,23 @@ class Auction:
 
             full = len(t.roster) >= self.cfg.roster_size
 
+            # Build the squad list of sold players on this team's roster.
+            squad = []
+            for cid in t.roster:
+                c = self.cands.get(cid)
+                if c is not None:
+                    squad.append({
+                        "name": c.name,
+                        "price": c.sold_price,
+                        "role": c.profile.get("role", "Player"),
+                    })
+
             info = {
                 "team": t.name,
                 "purse": t.purse,
                 "roster": len(t.roster),
                 "full": full,
+                "squad": squad,
             }
 
             if self.phase in ("LIVE", "AWAITING_HAMMER"):
@@ -875,6 +887,40 @@ class Auction:
 
             leader_id = self.leader()
 
+            # Stats: how many players have been sold out of the total pool.
+            sold_count = sum(
+                1 for c in self.cands.values() if c.status == "SOLD"
+            )
+            total_candidates = len(self.cands)
+
+            # Recent bids on the current candidate (last 10, newest first).
+            valid_bids = self._valid_bids()
+            recent_bids = [
+                {
+                    "team_id": b.team_id,
+                    "team_name": self.teams[b.team_id].name if b.team_id in self.teams else f"Team {b.team_id}",
+                    "amount": b.amount,
+                }
+                for b in reversed(valid_bids[-10:])
+            ]
+
+            # Upcoming queued candidates (next 5 after the current one).
+            upcoming = []
+            found_current = self.current is None
+            for cid in self.order:
+                c = self.cands[cid]
+                if cid == self.current:
+                    found_current = True
+                    continue
+                if found_current and c.status == "QUEUED" and len(upcoming) < 5:
+                    upcoming.append({
+                        "id": c.id,
+                        "name": c.name,
+                        "tier": c.tier,
+                        "rating": c.rating,
+                        "role": c.profile.get("role", ""),
+                    })
+
             return {
                 "phase": self.phase,
                 "round": self.round_no,
@@ -904,6 +950,7 @@ class Auction:
                     if leader_id is not None and leader_id in self.teams
                     else None
                 ),
+                "leader_id": leader_id,
                 "next_price": (
                     self.next_price()
                     if self.phase == "LIVE" and cand is not None
@@ -911,12 +958,27 @@ class Auction:
                 ),
                 "result": self.last_result,
                 "done_reason": self.done_reason,
+                "stats": {
+                    "sold_count": sold_count,
+                    "total_candidates": total_candidates,
+                },
+                "recent_bids": recent_bids,
+                "upcoming": upcoming,
                 "teams": [
                     {
                         "id": t.id,
                         "name": t.name,
                         "purse": t.purse,
                         "roster": len(t.roster),
+                        "players": [
+                            {
+                                "name": self.cands[cid].name,
+                                "price": self.cands[cid].sold_price,
+                                "role": self.cands[cid].profile.get("role", "Player"),
+                            }
+                            for cid in t.roster
+                            if cid in self.cands
+                        ],
                     }
                     for t in self.teams.values()
                 ],

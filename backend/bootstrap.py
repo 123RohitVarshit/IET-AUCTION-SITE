@@ -48,6 +48,16 @@ def create_state(base_dir: Path) -> AppState:
     teams_csv = data_dir / "teams.csv"
     db_path = data_dir / "auction.db"
 
+    # Always start fresh: delete old database so the auction resets on
+    # every server restart instead of resuming from saved state.
+    if db_path.exists():
+        db_path.unlink()
+    # Also remove WAL and SHM files left by SQLite.
+    for suffix in (".db-wal", ".db-shm"):
+        wal_path = db_path.with_suffix(suffix)
+        if wal_path.exists():
+            wal_path.unlink()
+
     store = Store(db_path)
 
     # Teams/login codes are always read from teams.csv if available.
@@ -58,20 +68,15 @@ def create_state(base_dir: Path) -> AppState:
         for team in teams
     }
 
-    saved_state = store.load_state()
+    # Always create a fresh auction from CSV data.
+    cfg = Config()
+    candidates = _load_if_exists(rated_csv, load_candidates)
 
-    if saved_state:
-        auction = Auction.from_dict(saved_state)
-        cfg = auction.cfg
-    else:
-        cfg = Config()
-        candidates = _load_if_exists(rated_csv, load_candidates)
-
-        auction = Auction(
-            cfg=cfg,
-            teams=teams,
-            candidates=candidates,
-        )
+    auction = Auction(
+        cfg=cfg,
+        teams=teams,
+        candidates=candidates,
+    )
 
     hub = WebSocketHub()
 
