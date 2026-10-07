@@ -1,0 +1,37 @@
+name: Keep Render Server Alive
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Render Backend
+        run: |
+          TARGET_URL="${{ secrets.RENDER_URL || vars.RENDER_URL || 'https://iet-auction-backend.onrender.com' }}"
+          TARGET_URL="${TARGET_URL%/}"
+          
+          echo "Pinging Render instance at: ${TARGET_URL}"
+          
+          HEALTH_URL="${TARGET_URL}/api/health"
+          echo "Sending keep-alive ping to ${HEALTH_URL}..."
+          
+          HTTP_CODE=$(curl -s -o /tmp/response.txt -w "%{http_code}" --max-time 60 --retry 3 --retry-delay 5 "${HEALTH_URL}" || true)
+          
+          if [ "$HTTP_CODE" = "200" ]; then
+            echo "Successfully pinged health endpoint. HTTP $HTTP_CODE"
+            cat /tmp/response.txt
+            echo ""
+          else
+            echo "Health endpoint returned HTTP $HTTP_CODE, trying root endpoint..."
+            ROOT_CODE=$(curl -s -o /tmp/response.txt -w "%{http_code}" --max-time 60 --retry 3 --retry-delay 5 "${TARGET_URL}/" || true)
+            echo "Root endpoint response HTTP $ROOT_CODE"
+            cat /tmp/response.txt
+            echo ""
+          fi
