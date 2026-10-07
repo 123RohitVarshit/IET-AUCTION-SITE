@@ -56,6 +56,32 @@ const setMessage = (id, message = '', good = false) => {
   }
 };
 
+let teamsSignature = '';
+function populateTeamSelects(teams) {
+  if (!teams || !teams.length) return;
+  const sig = teams.map((t) => `${t.id}:${t.name}`).join('|');
+  if (sig === teamsSignature) return;
+  teamsSignature = sig;
+
+  const captainSelect = $('captain-team-id');
+  if (captainSelect) {
+    const currentVal = captainSelect.value;
+    captainSelect.innerHTML =
+      '<option value="" disabled' + (!currentVal ? ' selected' : '') + '>Select your team...</option>' +
+      teams.map((t) => `<option value="${t.id}">${t.id} // ${t.name}</option>`).join('');
+    if (currentVal) captainSelect.value = currentVal;
+  }
+
+  const proxySelect = $('admin-proxy-team');
+  if (proxySelect) {
+    const currentVal = proxySelect.value;
+    proxySelect.innerHTML =
+      '<option value="" disabled' + (!currentVal ? ' selected' : '') + '>Choose franchise...</option>' +
+      teams.map((t) => `<option value="${t.id}">${t.name} (${t.id})</option>`).join('');
+    if (currentVal) proxySelect.value = currentVal;
+  }
+}
+
 function renderSnapshot(snapshot) {
   if (!snapshot) return;
   state.snapshot = snapshot;
@@ -213,6 +239,14 @@ function renderSnapshot(snapshot) {
       `;
       })
       .join('');
+
+    if ($('topbar-pool-badge')) {
+      $('topbar-pool-badge').textContent = `${snapshot.teams.length} TEAMS`;
+    }
+    if ($('stage-squads-title')) {
+      $('stage-squads-title').textContent = `${snapshot.teams.length} SQUADS // 1 PURSE (10,000 PTS)`;
+    }
+    populateTeamSelects(snapshot.teams);
   }
 
   const upcomingNode = $('stage-upcoming');
@@ -282,13 +316,42 @@ function renderCaptainView(view) {
     $('captain-round').textContent = `ROUND ${String(state.snapshot?.round || 1).padStart(2, '0')}`;
   }
 
-  const nextPrice = view.next_price || (state.snapshot?.phase === 'LIVE' ? (state.snapshot.next_price || current?.base_price) : null);
-  if ($('captain-next-bid')) $('captain-next-bid').textContent = nextPrice ? money(nextPrice) : '—';
-  if ($('captain-bid-price')) $('captain-bid-price').textContent = nextPrice ? money(nextPrice) : 'BID UNAVAILABLE';
+  const minNextPrice = view.next_price || (state.snapshot?.phase === 'LIVE' ? (state.snapshot.next_price || current?.base_price) : null);
+  if ($('captain-next-bid')) $('captain-next-bid').textContent = minNextPrice ? money(minNextPrice) : '—';
 
-  const bidBtn = $('captain-bid-button');
-  if (bidBtn) {
-    bidBtn.disabled = !view.can_bid;
+  // Render bid options grid
+  const optionsNode = $('captain-bid-options');
+  if (optionsNode) {
+    const options = view.bid_options || [];
+    if (options.length > 0) {
+      optionsNode.innerHTML = options.map((amt, i) => {
+        const isMin = i === 0;
+        const label = isMin ? `BASE BID` : `+${Number(amt - options[0]).toLocaleString('en-IN')}`;
+        return `
+          <button class="btn-bid-option mechanical-btn ${isMin ? 'btn-bid-option-min' : ''}" data-bid-amount="${amt}">
+            <span class="bid-option-label">${label}</span>
+            <strong class="bid-option-amount tabular-nums">${money(amt)}</strong>
+          </button>
+        `;
+      }).join('');
+
+      // Attach click handlers
+      optionsNode.querySelectorAll('.btn-bid-option').forEach((btn) => {
+        btn.addEventListener('click', () => placeBid(Number(btn.dataset.bidAmount)));
+      });
+    } else {
+      // Show reason or a friendly message
+      const msg = view.can_bid === false && view.reason
+        ? `⚠️ ${view.reason}`
+        : view.full
+        ? '✅ Your squad is complete!'
+        : state.snapshot?.phase === 'PREVIEW'
+        ? '⏳ Preview phase — bidding opens soon...'
+        : state.snapshot?.phase === 'LIVE' && view.status === 'LEADING'
+        ? '👑 You are leading! Wait for another team to bid.'
+        : 'No bids available right now.';
+      optionsNode.innerHTML = `<div class="bid-option-placeholder">${msg}</div>`;
+    }
   }
 
   const verdictBanner = $('captain-verdict-banner');
@@ -300,11 +363,11 @@ function renderCaptainView(view) {
       if ($('captain-verdict-text')) $('captain-verdict-text').textContent = '👑 YOU ARE CURRENTLY LEADING THE BID!';
     } else if (view.status === 'OUTBID') {
       verdictBanner.classList.add('outbid');
-      if ($('captain-verdict-text')) $('captain-verdict-text').textContent = `🔥 YOU ARE OUTBID! TAP BELOW TO BID ${money(nextPrice)}!`;
+      if ($('captain-verdict-text')) $('captain-verdict-text').textContent = `🔥 YOU ARE OUTBID! SELECT A BID BELOW TO COUNTER!`;
     } else if (view.full) {
       if ($('captain-verdict-text')) $('captain-verdict-text').textContent = '✅ YOUR 4-PLAYER SQUAD IS COMPLETE!';
     } else if (view.can_bid) {
-      if ($('captain-verdict-text')) $('captain-verdict-text').textContent = `⚡ BIDDING OPEN AT ${money(nextPrice)}! TAP BUTTON BELOW TO BID.`;
+      if ($('captain-verdict-text')) $('captain-verdict-text').textContent = `⚡ BIDDING OPEN! SELECT AN AMOUNT BELOW TO BID.`;
     } else if (view.reason) {
       if ($('captain-verdict-text')) $('captain-verdict-text').textContent = `⚠️ ${view.reason}`;
     } else if (state.snapshot?.phase === 'PREVIEW') {
@@ -501,6 +564,29 @@ async function refreshSnapshot() {
   }
 }
 
+
+async function placeBid(price) {
+  if (!price) {
+    setMessage('captain-bid-message', 'Invalid bid amount.');
+    return;
+  }
+  // Disable all bid option buttons during API call
+  document.querySelectorAll('.btn-bid-option').forEach((b) => (b.disabled = true));
+  try {
+    const result = await api('/api/captain/bid', {
+      method: 'POST',
+      headers: { 'X-Team-Token': state.teamToken },
+      body: JSON.stringify({ price }),
+    });
+    setMessage('captain-bid-message', result.reason || 'Bid placed!', result.ok);
+    await refreshCaptain();
+  } catch (error) {
+    setMessage('captain-bid-message', error.message);
+    // Re-render to restore buttons
+    if (state.captainView) renderCaptainView(state.captainView);
+  }
+}
+
 function bindEvents() {
 
   const fsBtn = $('fullscreen-btn');
@@ -537,40 +623,8 @@ function bindEvents() {
     });
   }
 
-  document.querySelectorAll('[data-quick-team]').forEach((chip) => {
-    chip.addEventListener('click', () => {
-      if ($('captain-team-id')) $('captain-team-id').value = chip.dataset.quickTeam;
-      if ($('captain-login-code')) $('captain-login-code').value = chip.dataset.quickCode;
-    });
-  });
-
-  const bidBtn = $('captain-bid-button');
-  if (bidBtn) {
-    bidBtn.addEventListener('click', async () => {
-      const price = state.captainView?.next_price || state.snapshot?.next_price || state.snapshot?.candidate?.base_price;
-      if (!price) {
-        setMessage('captain-bid-message', 'Bidding is not open for this prospect right now.');
-        return;
-      }
-      bidBtn.disabled = true;
-
-      try {
-        const result = await api('/api/captain/bid', {
-          method: 'POST',
-          headers: { 'X-Team-Token': state.teamToken },
-          body: JSON.stringify({ price }),
-        });
-        setMessage('captain-bid-message', result.reason || 'Bid placed successfully!', result.ok);
-        await refreshCaptain();
-      } catch (error) {
-        setMessage('captain-bid-message', error.message);
-      } finally {
-        if (state.captainView) {
-          renderCaptainView(state.captainView);
-        }
-      }
-    });
-  }
+  // Note: bid option buttons are rendered dynamically in renderCaptainView()
+  // and each gets a click handler calling placeBid(). No static bind needed.
 
   const captainLogout = $('captain-logout');
   if (captainLogout) {
@@ -660,7 +714,11 @@ function bindEvents() {
   const proxyBidBtn = $('btn-admin-proxy-bid');
   if (proxyBidBtn) {
     proxyBidBtn.addEventListener('click', async () => {
-      const teamId = Number($('admin-proxy-team')?.value || 1);
+      const teamId = Number($('admin-proxy-team')?.value);
+      if (!teamId) {
+        setMessage('admin-action-message', 'Please select a franchise team.');
+        return;
+      }
       const priceVal = $('admin-proxy-price')?.value;
       const price = priceVal ? Number(priceVal) : undefined;
 

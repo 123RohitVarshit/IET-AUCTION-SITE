@@ -145,9 +145,10 @@ class CheckBidTests(unittest.TestCase):
         self.assertFalse(verdict.ok)
         self.assertEqual(verdict.code, "ALREADY_LEADING")
 
-    def test_reject_wrong_first_bid_price(self):
+    def test_reject_bid_below_minimum(self):
+        # Bid below the base price should be rejected (STALE)
         verdict = rules.check_bid(
-            price=1100,
+            price=800,
             current_bid=None,
             base=1000,
             purse=10_000,
@@ -159,7 +160,23 @@ class CheckBidTests(unittest.TestCase):
         self.assertFalse(verdict.ok)
         self.assertEqual(verdict.code, "STALE")
 
+    def test_accept_jump_bid_above_minimum(self):
+        # A jump bid (+500 on top of base) should be accepted
+        verdict = rules.check_bid(
+            price=1500,
+            current_bid=None,
+            base=1000,
+            purse=10_000,
+            roster_count=0,
+            is_leader=False,
+            cfg=self.cfg,
+        )
+
+        self.assertTrue(verdict.ok)
+        self.assertEqual(verdict.code, "OK")
+
     def test_reject_stale_followup_bid(self):
+        # Bidding the same amount as current bid (no increase) should be rejected
         verdict = rules.check_bid(
             price=1000,
             current_bid=1000,

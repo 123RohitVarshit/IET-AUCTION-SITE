@@ -29,7 +29,7 @@
         </a>
 
         <div class="topbar-right-actions">
-          <span class="pool-badge">₹30K POOL • 8 TEAMS</span>
+          <span class="pool-badge" id="topbar-pool-badge">TEAMS POOL</span>
           <button class="btn-projector mechanical-btn" id="fullscreen-btn" title="Toggle Fullscreen Projector Mode">
             ⛶ PROJECTOR
           </button>
@@ -167,7 +167,7 @@
           <div class="section-head-brutal">
             <div>
               <span class="section-tag-brutal">THE DRAFT BOARD</span>
-              <h2 class="section-title-brutal">8 SQUADS // 1 PURSE (10,000 PTS)</h2>
+              <h2 class="section-title-brutal" id="stage-squads-title">SQUADS // 1 PURSE (10,000 PTS)</h2>
             </div>
             <span class="category-badge" style="background:#FFFFFF;">TARGET: 4 PLAYERS / TEAM</span>
           </div>
@@ -204,28 +204,13 @@
               <div>
                 <label class="form-label-brutal" for="captain-team-id">SELECT FRANCHISE</label>
                 <select required name="team_id" id="captain-team-id" class="select-brutal">
-                  <option value="" disabled selected>Select your team...</option>
-                  <option value="1">1 // Mumbai Super Strikers</option>
-                  <option value="2">2 // Chennai Super Kings</option>
-                  <option value="3">3 // Bangalore Challengers</option>
-                  <option value="4">4 // Kolkata Knight Riders</option>
-                  <option value="5">5 // Delhi Capitals</option>
-                  <option value="6">6 // Rajasthan Royals</option>
-                  <option value="7">7 // Gujarat Titans</option>
-                  <option value="8">8 // Sunrisers Hyderabad</option>
+                  <option value="" disabled selected>Loading teams...</option>
                 </select>
               </div>
 
               <div>
                 <label class="form-label-brutal" for="captain-login-code">LOGIN ACCESS CODE</label>
-                <input required name="login_code" id="captain-login-code" type="password" placeholder="e.g. mumbai11" class="input-brutal" />
-              </div>
-
-              <div class="quick-fill-chips">
-                <span style="font-family:var(--font-mono); font-size:10px; color:#64748B;">Test Quick-Fill:</span>
-                <button type="button" class="quick-chip mechanical-btn" data-quick-team="1" data-quick-code="mumbai11">Mumbai (1)</button>
-                <button type="button" class="quick-chip mechanical-btn" data-quick-team="2" data-quick-code="chennai22">Chennai (2)</button>
-                <button type="button" class="quick-chip mechanical-btn" data-quick-team="3" data-quick-code="bengaluru33">Bangalore (3)</button>
+                <input required name="login_code" id="captain-login-code" type="password" placeholder="Enter your login code" class="input-brutal" />
               </div>
 
               <button class="btn-brutal btn-amber btn-block mechanical-btn" type="submit">
@@ -274,14 +259,14 @@
 
               <div>
                 <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-family:var(--font-mono); font-size:12px; font-weight:800;">
-                  <span>NEXT VALID BID:</span>
+                  <span>MIN NEXT BID:</span>
                   <strong class="tabular-nums" id="captain-next-bid" style="color:var(--stadium-ctaRed); font-size:16px;">—</strong>
                 </div>
 
-                <button class="btn-bid-giant mechanical-btn" id="captain-bid-button" disabled>
-                  <span class="bid-action-title">PLACE SERVER-VALIDATED BID</span>
-                  <strong class="bid-action-amount tabular-nums" id="captain-bid-price">—</strong>
-                </button>
+                <div class="bid-options-label">⚡ SELECT YOUR BID AMOUNT:</div>
+                <div class="bid-options-grid" id="captain-bid-options">
+                  <div class="bid-option-placeholder">Waiting for live bidding...</div>
+                </div>
                 <p class="form-msg-box text-center" id="captain-bid-message"></p>
               </div>
             </div>
@@ -408,14 +393,7 @@
                   <span class="admin-tool-title">🙋‍♂️ PROXY / SUBSTITUTE BID (OFFLINE PADDLE)</span>
                   <div style="display:flex; gap:8px;">
                     <select id="admin-proxy-team" class="select-brutal" style="flex:1;">
-                      <option value="1">Mumbai (1)</option>
-                      <option value="2">Chennai (2)</option>
-                      <option value="3">Bangalore (3)</option>
-                      <option value="4">Kolkata (4)</option>
-                      <option value="5">Delhi (5)</option>
-                      <option value="6">Rajasthan (6)</option>
-                      <option value="7">Gujarat (7)</option>
-                      <option value="8">Hyderabad (8)</option>
+                      <option value="">Loading teams...</option>
                     </select>
                     <input type="number" id="admin-proxy-price" placeholder="Price..." class="input-brutal" style="flex:1;" />
                     <button class="btn-brutal mechanical-btn" id="btn-admin-proxy-bid">BID</button>

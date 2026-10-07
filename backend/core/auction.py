@@ -818,6 +818,7 @@ class Auction:
                 if self.phase == "AWAITING_HAMMER":
                     can = False
                     reason = "Waiting for the auctioneer to close this player."
+                    options = []
                 else:
                     v = rules.check_bid(
                         price,
@@ -840,12 +841,26 @@ class Auction:
                     else:
                         reason = v.reason
 
+                    # Compute affordability-filtered bid options for the captain UI.
+                    if not self.frozen and not self.paused and not full:
+                        options = rules.bid_options(
+                            self.current_bid(),
+                            self.current_base(),
+                            t.purse,
+                            len(t.roster),
+                            self.leader() == team_id,
+                            self.cfg,
+                        )
+                    else:
+                        options = []
+
                 info.update(
                     status="FULL" if full else status,
                     next_price=price,
                     can_bid=can,
                     reason=reason,
                     max_bid=rules.max_bid(t.purse, len(t.roster), self.cfg),
+                    bid_options=options,
                 )
 
             return info

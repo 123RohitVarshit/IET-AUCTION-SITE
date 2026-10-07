@@ -1012,6 +1012,95 @@ a.mechanical-btn:active {
   line-height: 1;
 }
 
+/* ── Bid Options Grid (replaces single bid button) ─────────────────── */
+
+.bid-options-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #64748B;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.bid-options-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.btn-bid-option {
+  background: #F8FAFC;
+  border: 2px solid var(--stadium-ink);
+  box-shadow: var(--shadow-brutal);
+  padding: 10px 12px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  transition: all 0.1s ease-out;
+}
+
+.btn-bid-option:hover:not(:disabled) {
+  background: var(--stadium-lightAmber);
+  border-color: var(--stadium-amberDark);
+}
+
+.btn-bid-option:disabled {
+  background: #CBD5E1;
+  color: #94A3B8;
+  border-color: #94A3B8;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.btn-bid-option-min {
+  background: var(--stadium-ctaRed);
+  color: #FFFFFF;
+  border-color: #000000;
+}
+
+.btn-bid-option-min:hover:not(:disabled) {
+  background: #B91C1C;
+  border-color: #000000;
+}
+
+.btn-bid-option-min:disabled {
+  background: #CBD5E1;
+  color: #94A3B8;
+  border-color: #94A3B8;
+  box-shadow: none;
+}
+
+.bid-option-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.bid-option-amount {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.bid-option-placeholder {
+  grid-column: 1 / -1;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748B;
+  text-align: center;
+  padding: 14px 0;
+  border: 1.5px dashed #CBD5E1;
+}
+
 .captain-side-panel {
   display: flex;
   flex-direction: column;

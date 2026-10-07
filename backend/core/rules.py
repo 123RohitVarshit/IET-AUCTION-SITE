@@ -10,7 +10,7 @@ These functions must be easy to test and reason about.
 """
 
 from collections import namedtuple
-from typing import Optional
+from typing import List, Optional
 
 
 Verdict = namedtuple("Verdict", "ok code reason")
@@ -28,7 +28,7 @@ def increment(price: int, cfg) -> int:
 
 def next_price(current_bid: Optional[int], base: int, cfg) -> int:
     """
-    Return the exact next valid bid amount.
+    Return the exact minimum next valid bid amount.
 
     First bid is the base price.
     Later bids are current bid + active increment.
@@ -83,6 +83,39 @@ def max_bid(purse: int, roster_count: int, cfg) -> int:
     return max(0, purse - reserved)
 
 
+# Fixed jump increments captains can add on top of the minimum next price.
+BID_INCREMENTS: List[int] = [250, 500, 1000, 1500]
+
+
+def bid_options(
+    current_bid: Optional[int],
+    base: int,
+    purse: int,
+    roster_count: int,
+    is_leader: bool,
+    cfg,
+) -> List[int]:
+    """
+    Return the list of valid bid amounts a captain can choose.
+
+    The first option is always the minimum next price.
+    Each subsequent option is minimum + one of BID_INCREMENTS.
+
+    An amount is only included when:
+      - the captain is not already leading, and
+      - the amount does not exceed the team's available purse, and
+      - the amount does not exceed the team's max_bid (reservation rule).
+    """
+    if is_leader:
+        return []
+
+    mb = max_bid(purse, roster_count, cfg)
+    minimum = next_price(current_bid, base, cfg)
+
+    candidates = [minimum] + [minimum + inc for inc in BID_INCREMENTS]
+    return [a for a in candidates if a <= purse and a <= mb]
+
+
 def check_bid(
     price: int,
     current_bid: Optional[int],
@@ -98,6 +131,10 @@ def check_bid(
     This function only checks pure bid rules.
     It does not check LIVE / paused / frozen state.
     Those are checked by the auction state machine.
+
+    Accepted prices: any amount >= next_price(current_bid, base) that also
+    does not exceed the team's max_bid.  This allows captains to place
+    jump bids (+250, +500, +1000, +1500) instead of only the minimum increment.
     """
 
     if price is None or price <= 0:
@@ -109,13 +146,13 @@ def check_bid(
     if is_leader:
         return Verdict(False, "ALREADY_LEADING", "You already have the highest bid.")
 
-    expected = next_price(current_bid, base, cfg)
+    minimum = next_price(current_bid, base, cfg)
 
-    if price != expected:
+    if price < minimum:
         return Verdict(
             False,
             "STALE",
-            f"The price has moved. The next valid bid is {expected}.",
+            f"The price has moved. The minimum valid bid is {minimum}.",
         )
 
     if price > purse:
