@@ -699,8 +699,17 @@ a.mechanical-btn:active {
 .franchise-top {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   margin-bottom: 8px;
+  gap: 8px;
+}
+
+.franchise-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex-wrap: wrap;
 }
 
 .franchise-name {
@@ -709,6 +718,7 @@ a.mechanical-btn:active {
   font-size: 13px;
   text-transform: uppercase;
   color: var(--stadium-ink);
+  line-height: 1.2;
 }
 
 .franchise-roster-pill {
