@@ -2,36 +2,79 @@ name: Keep Render Server Alive
 
 on:
   schedule:
-    - cron: "*/7 * * * *"
+    # Every 5 minutes, offset from the top of the hour
+    - cron: "2-57/5 * * * *"
+
   workflow_dispatch:
-  push:
-    branches:
-      - main
 
 jobs:
   ping:
     runs-on: ubuntu-latest
+
     steps:
       - name: Ping Render Backend
+        env:
+          RENDER_URL: ${{ secrets.RENDER_URL || vars.RENDER_URL || 'https://iet-auction-site.onrender.com' }}
+
         run: |
-          TARGET_URL="${{ secrets.RENDER_URL || vars.RENDER_URL || 'https://iet-auction-site.onrender.com' }}"
-          TARGET_URL="${TARGET_URL%/}"
-          
-          echo "Pinging Render instance at: ${TARGET_URL}"
-          
-          PING_URL="${TARGET_URL}/api/stage/state"
-          echo "Sending keep-alive ping to ${PING_URL}..."
-          
-          HTTP_CODE=$(curl -s -o /tmp/response.txt -w "%{http_code}" --max-time 60 --retry 3 --retry-delay 5 "${PING_URL}" || true)
-          
+          set -u
+
+          TARGET_URL="${RENDER_URL%/}"
+          HEALTH_URL="${TARGET_URL}/api/stage/state"
+
+          echo "======================================"
+          echo "IET Auction - Render Keep Alive"
+          echo "======================================"
+          echo "Target: ${HEALTH_URL}"
+          echo "UTC: $(date -u)"
+          echo ""
+
+          HTTP_CODE=$(curl \
+            --silent \
+            --show-error \
+            --output /tmp/response.txt \
+            --write-out "%{http_code}" \
+            --connect-timeout 15 \
+            --max-time 60 \
+            --retry 3 \
+            --retry-delay 5 \
+            --retry-all-errors \
+            "${HEALTH_URL}" || true)
+
+          echo "HTTP status: ${HTTP_CODE}"
+
           if [ "$HTTP_CODE" = "200" ]; then
-            echo "Successfully pinged state endpoint. HTTP $HTTP_CODE"
-            cat /tmp/response.txt | head -c 200
+            echo "✅ Render backend is alive."
+            echo ""
+            echo "Response:"
+            head -c 500 /tmp/response.txt
             echo ""
           else
-            echo "Endpoint returned HTTP $HTTP_CODE, trying root endpoint..."
-            ROOT_CODE=$(curl -s -o /tmp/response.txt -w "%{http_code}" --max-time 60 --retry 3 --retry-delay 5 "${TARGET_URL}/" || true)
-            echo "Root endpoint response HTTP $ROOT_CODE"
-            cat /tmp/response.txt | head -c 200
+            echo "⚠️ /api/stage/state returned HTTP ${HTTP_CODE}"
+            echo "Trying root endpoint..."
+
+            ROOT_CODE=$(curl \
+              --silent \
+              --show-error \
+              --output /tmp/response.txt \
+              --write-out "%{http_code}" \
+              --connect-timeout 15 \
+              --max-time 60 \
+              --retry 3 \
+              --retry-delay 5 \
+              --retry-all-errors \
+              "${TARGET_URL}/" || true)
+
+            echo "Root HTTP status: ${ROOT_CODE}"
             echo ""
+            echo "Response:"
+            head -c 500 /tmp/response.txt
+            echo ""
+
+            if [ "$ROOT_CODE" = "200" ]; then
+              echo "✅ Render backend is reachable."
+            else
+              echo "❌ Render backend did not respond successfully."
+              exit 1
+            fi
           fi
