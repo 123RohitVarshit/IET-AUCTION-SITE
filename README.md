@@ -1,3 +1,5 @@
+[![Keep Render Server Alive](https://github.com/SohanRaidev/IET-AUCTION-SITE/actions/workflows/keep-alive.yml/badge.svg)](https://github.com/SohanRaidev/IET-AUCTION-SITE/actions/workflows/keep-alive.yml)
+
 # IET Auction System
 
 Real-time team auction platform for the IET Hackathon.
