@@ -2,8 +2,7 @@ name: Keep Render Server Alive
 
 on:
   schedule:
-    # Every 5 minutes, starting at minute 2
-    - cron: "2/5 * * * *"
+    - cron: "2,7,12,17,22,27,32,37,42,47,52,57 * * * *"
 
   workflow_dispatch:
 
@@ -12,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Ping Render
+      - name: Ping Render Backend
         run: |
           URL="https://iet-auction-site.onrender.com/api/stage/state"
 
@@ -38,10 +37,11 @@ jobs:
 
           if [ "$HTTP_CODE" = "200" ]; then
             echo "✅ Render is alive."
+            echo "Response:"
             head -c 500 /tmp/response.txt
             echo
           else
-            echo "⚠️ State endpoint returned $HTTP_CODE"
+            echo "⚠️ State endpoint returned HTTP $HTTP_CODE"
             echo "Trying root endpoint..."
 
             ROOT_CODE=$(curl \
@@ -57,6 +57,7 @@ jobs:
               "https://iet-auction-site.onrender.com/" || true)
 
             echo "Root HTTP: $ROOT_CODE"
+            echo "Response:"
             head -c 500 /tmp/response.txt
             echo
 
