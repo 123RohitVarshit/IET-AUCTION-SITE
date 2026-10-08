@@ -48,6 +48,26 @@ const api = async (path, options = {}) => {
   return body;
 };
 
+const getTeamAcronym = (teamId, teamName) => {
+  const acronymsById = {
+    1: 'CSK',
+    2: 'RCB',
+    3: 'MI',
+    4: 'RR',
+    5: 'KKR',
+    6: 'GT',
+    7: 'SRH',
+    8: 'DC',
+  };
+  if (teamId && acronymsById[teamId]) return acronymsById[teamId];
+  if (!teamName) return 'TM';
+  const words = teamName.trim().split(/\s+/);
+  if (words.length >= 2) {
+    return words.map((w) => w[0]).join('').toUpperCase().slice(0, 4);
+  }
+  return teamName.slice(0, 3).toUpperCase();
+};
+
 const setMessage = (id, message = '', good = false) => {
   const node = $(id);
   if (node) {
@@ -225,7 +245,10 @@ function renderSnapshot(snapshot) {
         return `
         <div class="franchise-card-brutal team-border-${t.id} ${isLeader ? 'is-leader' : ''}">
           <div class="franchise-top">
-            <h3 class="franchise-name">${t.name}</h3>
+            <div class="franchise-title-group">
+              <span class="team-monogram-pill team-badge-${t.id}">${getTeamAcronym(t.id, t.name)}</span>
+              <h3 class="franchise-name">${t.name}</h3>
+            </div>
             <span class="franchise-roster-pill ${isFull ? 'is-full' : ''}">${t.roster} / 4</span>
           </div>
           <div class="franchise-purse-row">
@@ -279,7 +302,15 @@ function renderCaptainView(view) {
   if (!view) return;
   state.captainView = view;
 
-  if ($('captain-team-name')) $('captain-team-name').textContent = view.team || 'MY FRANCHISE';
+  if ($('captain-team-name')) {
+    const acronym = getTeamAcronym(view.id, view.team);
+    $('captain-team-name').innerHTML = `
+      <span style="display:inline-flex; align-items:center; gap:6px;">
+        <span class="team-monogram-pill team-badge-${view.id || 1}" style="font-size:10px; padding:2px 6px;">${acronym}</span>
+        ${view.team || 'MY FRANCHISE'}
+      </span>
+    `;
+  }
   if ($('captain-connection')) $('captain-connection').textContent = view.team ? `SIGNED IN: ${view.team}` : 'ONLINE';
   if ($('captain-purse')) $('captain-purse').textContent = money(view.purse);
   if ($('captain-max-bid')) $('captain-max-bid').textContent = money(view.max_bid);
