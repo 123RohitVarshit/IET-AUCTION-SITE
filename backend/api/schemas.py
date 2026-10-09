@@ -50,3 +50,7 @@ class SetTimesRequest(BaseModel):
     preview: Optional[float] = None
     bid: Optional[float] = None
     result: Optional[float] = None
+
+
+class RosterSizeRequest(BaseModel):
+    size: int

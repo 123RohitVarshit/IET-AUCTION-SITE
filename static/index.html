@@ -169,7 +169,7 @@
               <span class="section-tag-brutal">THE DRAFT BOARD</span>
               <h2 class="section-title-brutal" id="stage-squads-title">SQUADS // 1 PURSE (10,000 PTS)</h2>
             </div>
-            <span class="category-badge" style="background:#FFFFFF;">TARGET: 4 PLAYERS / TEAM</span>
+            <span class="category-badge" id="stage-target-badge" style="background:#FFFFFF;">TARGET: 4 PLAYERS / TEAM</span>
           </div>
 
           <div class="franchise-cards-grid" id="stage-teams">
@@ -278,6 +278,10 @@
                   <span>AVAILABLE PURSE</span>
                   <span id="captain-team-name" style="color:var(--stadium-amberDark);">MY TEAM</span>
                 </div>
+                <div style="display:flex; align-items:center; gap:6px; margin: 6px 0 2px 0;">
+                  <span style="font-size:11px; font-weight:700; color:#64748B;">CAPTAIN:</span>
+                  <strong id="captain-user-name" style="color:var(--stadium-ink); font-size:13px;">—</strong>
+                </div>
                 <div class="purse-box-digits tabular-nums" id="captain-purse">10,000 PTS</div>
                 <div style="font-family:var(--font-mono); font-size:11px; border-top:1px solid #E2E8F0; padding-top:8px; display:flex; justify-content:space-between;">
                   <span>MAX ALLOWABLE BID:</span>
@@ -288,10 +292,10 @@
               <div class="side-card-brutal">
                 <div style="display:flex; justify-content:space-between; align-items:center; font-family:var(--font-mono); font-size:12px; font-weight:800;">
                   <span>YOUR SQUAD</span>
-                  <span class="category-badge" id="captain-roster-count">0 / 4</span>
+                  <span class="category-badge" id="captain-roster-count">0 / 4 DRAFTED</span>
                 </div>
                 <div class="roster-list-brutal" id="captain-roster">
-                  <div style="font-family:var(--font-mono); font-size:11px; color:#64748B; padding:12px 0;">No players signed yet.</div>
+                  <div style="font-family:var(--font-mono); font-size:11px; color:#64748B; padding:12px 0;">Loading squad...</div>
                 </div>
                 <button class="btn-brutal btn-white btn-block mechanical-btn" id="captain-logout" style="margin-top:12px;">
                   SIGN OUT CONSOLE
@@ -367,6 +371,19 @@
                 </div>
 
                 <div class="action-btns-grid">
+                  <div class="admin-tool-box" id="admin-roster-size-box" style="margin-bottom:12px; border:2px solid var(--stadium-amber); background:#FFFBEB; padding:12px; border-radius:4px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                      <span class="admin-tool-title" style="color:var(--stadium-amberDark); font-weight:800; font-size:12px;">👥 SELECT TEAM SQUAD SIZE</span>
+                      <span class="category-badge" id="admin-roster-current-badge" style="background:var(--stadium-ink); color:#FFF;">4 PLAYERS / TEAM</span>
+                    </div>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px;">
+                      <button type="button" class="btn-brutal mechanical-btn" data-roster-size="3" id="roster-btn-3" style="text-align:center; padding:8px 4px; font-weight:700;">3 Players</button>
+                      <button type="button" class="btn-brutal btn-amber mechanical-btn active" data-roster-size="4" id="roster-btn-4" style="text-align:center; padding:8px 4px; font-weight:700; box-shadow: 0 0 0 2px var(--stadium-ink);">4 Players</button>
+                      <button type="button" class="btn-brutal mechanical-btn" data-roster-size="5" id="roster-btn-5" style="text-align:center; padding:8px 4px; font-weight:700;">5 Players</button>
+                    </div>
+                    <p id="admin-roster-status-hint" style="font-family:var(--font-mono); font-size:10px; color:#64748B; margin-top:8px; margin-bottom:0;">⚡ Choose how many players each captain can buy (3, 4, or 5). Only selectable before auction starts.</p>
+                  </div>
+
                   <button class="btn-admin-action btn-green mechanical-btn" data-admin-action="start">START AUCTION ▶</button>
                   <button class="btn-admin-action mechanical-btn" data-admin-action="next">NEXT PLAYER ➔</button>
                   <button class="btn-admin-action mechanical-btn" data-admin-action="pause">PAUSE CLOCK ⏸</button>
@@ -465,7 +482,7 @@
         <strong>SIES GST × IET AUCTION PLATFORM</strong> // THE LIVE DRAFT
       </div>
       <div>
-        SERVER IS THE ONLY REFEREE // FASTAPI + WEBSOCKET
+        MADE BY TECHNICAL TEAM OF IET
       </div>
     </footer>
 

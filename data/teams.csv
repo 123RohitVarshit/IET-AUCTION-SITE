@@ -1,9 +1,9 @@
-id,name,login_code,purse
-1,Cognitive Super Kings,csk100,10000
-2,Royal Challenging Builders,rcb200,10000
-3,Meta Indians,mi300,10000
-4,Robotic Royals,rr400,10000
-5,Kernel Knight Riders,kkr500,10000
-6,Generative Titans,gt600,10000
-7,Sunrises Hub,srh700,10000
-8,Dynamic Capitals,dc800,10000
+id,name,login_code,purse,captain
+1,Cognitive Super Kings,csk100,10000,Capt. Devendra
+2,Royal Challenging Builders,rcb200,10000,Capt. Radhika
+3,Meta Indians,mi300,10000,Capt. Pranav
+4,Robotic Royals,rr400,10000,Capt. Avantika
+5,Kernel Knight Riders,kkr500,10000,Capt. Sameer
+6,Generative Titans,gt600,10000,Capt. Ishita
+7,Sunrises Hub,srh700,10000,Capt. Gaurav
+8,Dynamic Capitals,dc800,10000,Capt. Nandini

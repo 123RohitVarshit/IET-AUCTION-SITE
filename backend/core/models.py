@@ -13,6 +13,7 @@ class Team:
     id: int
     name: str
     purse: int
+    captain: str = ""
     roster: List[int] = field(default_factory=list)
 
 

@@ -45,6 +45,7 @@ class Auction:
                 id=t["id"],
                 name=t["name"],
                 purse=t.get("purse", cfg.purse),
+                captain=t.get("captain", ""),
                 roster=list(t.get("roster", [])),
             )
 
@@ -141,8 +142,9 @@ class Auction:
             N = len(self.cands)
             R = self.cfg.roster_size
 
+            min_p = getattr(self.cfg, "min_purse", 1000)
             purse_ok = all(
-                t.purse >= R * self.cfg.floor_price
+                t.purse >= (R * self.cfg.floor_price + min_p)
                 for t in self.teams.values()
             )
 
@@ -171,6 +173,23 @@ class Auction:
 
             self.phase = "IDLE"
             self._log("start", **rep)
+
+    def set_roster_size(self, size: int) -> None:
+        """
+        Change the roster size (players per team).
+
+        Only allowed before the auction starts (SETUP phase).
+        """
+        with self.lock:
+            if self.phase != "SETUP":
+                raise ValueError(
+                    "Roster size can only be changed before the auction starts."
+                )
+            if size not in (3, 4, 5):
+                raise ValueError("Roster size must be 3, 4, or 5.")
+            self.cfg.roster_size = size
+            self._log("set_roster_size", size=size)
+            return {"roster_size": size, "message": f"Squad size updated to {size} players per team."}
 
     # ------------------------------------------------------------------
     # Flow
@@ -641,6 +660,7 @@ class Auction:
                         "id": t.id,
                         "name": t.name,
                         "purse": t.purse,
+                        "captain": t.captain,
                         "roster": list(t.roster),
                     }
                     for t in self.teams.values()
@@ -716,6 +736,7 @@ class Auction:
                     "id": t["id"],
                     "name": t["name"],
                     "purse": t["purse"],
+                    "captain": t.get("captain", ""),
                     "roster": list(t.get("roster", [])),
                 }
                 for t in data["teams"]
@@ -808,8 +829,10 @@ class Auction:
                 "team": t.name,
                 "purse": t.purse,
                 "roster": len(t.roster),
+                "roster_size": self.cfg.roster_size,
                 "full": full,
                 "squad": squad,
+                "captain": t.captain,
             }
 
             if self.phase in ("LIVE", "AWAITING_HAMMER"):
@@ -928,6 +951,7 @@ class Auction:
                 "frozen": self.frozen,
                 "manual_mode": self.manual_mode,
                 "seconds_left": round(self.time_left(), 1),
+                "roster_size": self.cfg.roster_size,
                 "candidate": (
                     None
                     if cand is None
@@ -969,6 +993,7 @@ class Auction:
                         "id": t.id,
                         "name": t.name,
                         "purse": t.purse,
+                        "captain": t.captain,
                         "roster": len(t.roster),
                         "players": [
                             {

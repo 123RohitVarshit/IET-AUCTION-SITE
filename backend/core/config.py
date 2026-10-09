@@ -13,6 +13,7 @@ class Config:
     # Squad rules
     roster_size: int = 4              # players per team, captain not counted
     purse: int = 10_000               # starting purse per team
+    min_purse: int = 1000             # minimum purse guardrail (captain's purse cannot drop below this)
 
     # Tier base prices
     tier_base: Dict[int, int] = field(

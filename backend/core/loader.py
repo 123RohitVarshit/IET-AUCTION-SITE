@@ -190,10 +190,13 @@ def load_teams(path: str) -> List[Dict[str, Any]]:
 
         seen_ids.add(team_id)
 
+        captain_name = str(row.get("captain", "")).strip()
+
         team: Dict[str, Any] = {
             "id": team_id,
             "name": name,
             "login_code": login_code,
+            "captain": captain_name or f"Capt. {name}",
         }
 
         purse_raw = str(row.get("purse", "")).strip()

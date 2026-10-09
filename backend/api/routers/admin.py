@@ -10,6 +10,7 @@ from ..schemas import (
     NextPlayerRequest,
     PurseEditRequest,
     ResetTimerRequest,
+    RosterSizeRequest,
     SetTimesRequest,
     SubstituteBidRequest,
 )
@@ -292,6 +293,20 @@ async def admin_set_times(
             bid=bid,
             result=result,
         ),
+    )
+
+
+@router.post("/api/admin/set-roster-size")
+async def admin_set_roster_size(
+    payload: RosterSizeRequest,
+    state=Depends(get_state),
+    _=Depends(require_admin),
+):
+    return await commit_admin_action(
+        state,
+        "set_roster_size",
+        {"size": payload.size},
+        lambda: state.auction.set_roster_size(payload.size),
     )
 
 

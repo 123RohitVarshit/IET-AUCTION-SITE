@@ -1,37 +1,45 @@
-id,name,aptitude,gd,profile,role,college,skill,projects,experience,cgpa,rating,tier,base_price
-1,Aarav Sharma,96,92,95,Full Stack Lead,SIES GST,React / FastAPI,Realtime Collab Platform,SIH 2025 Winner,9.4,2176,1,1000
-2,Ananya Iyer,94,95,92,AI / ML Engineer,SIES GST,PyTorch / OpenCV,Autonomous Drone Vision,2x Hackathon Finalist,9.6,2040,1,1000
-4,Diya Deshmukh,95,90,90,UI/UX & Pitch Lead,DJ Sanghvi,Figma / Next.js,Fintech Neo-Banking App,Design Lead @ GDSC,9.3,1908,1,1000
-3,Rohan Kulkarni,91,89,94,Cloud & DevOps,VESIT,Go / Kubernetes,Distributed Cache Engine,AWS Certified / GSoc'24,9.1,1878,1,1000
-5,Vikram Malhotra,88,94,89,Backend Architect,SPIT,Rust / PostgreSQL,High-Freq Order Book,Smart India Hackathon,8.9,1811,2,600
-7,Tanvi Patil,89,91,88,Data Scientist,COEP,Pandas / Scikit-Learn,Medical Diagnostic AI,Kaggle Grandmaster track,9.2,1792,2,600
-6,Ishaan Joshi,90,87,91,Mobile Specialist,VJTI,Flutter / Firebase,Campus Social Network,App Store 10k+ Downloads,9.0,1785,2,600
-8,Kabir Mehta,92,86,87,Cybersecurity Lead,K.J. Somaiya,Wireshark / Python,Zero-Trust Auth Protocol,CTF Global Top 50,8.8,1748,2,600
-9,Sanya Verma,86,92,85,Full Stack Dev,Thadomal Shahani,Next.js / Node.js,AI Resume Screener,HackMumbai Winner,8.7,1688,2,600
-10,Aditya Nair,87,88,86,IoT & Systems,SIES GST,C++ / ESP32,Smart Microgrid Controller,Patent Filed (IoT),8.9,1688,2,600
-12,Siddharth Rao,88,84,85,Backend Engineer,DJ Sanghvi,Django / Redis,Scalable Microservices,Backend Intern @ Razorpay,8.8,1632,2,600
-11,Pooja Hegde,85,89,84,Frontend Engineer,VESIT,Vue.js / TailwindCSS,Interactive 3D Web Canvas,Webflow Expert,8.6,1624,3,400
-13,Rhea Sen,84,87,86,Product & Pitch,SPIT,Product / Wireframing,EdTech Learning Platform,Best Pitch Award @ E-Summit,9.1,1622,3,400
-16,Yash Singhania,85,82,86,Cloud Architect,K.J. Somaiya,Terraform / Docker,Cloud Cost Optimizer,Certified GCP Associate,8.5,1586,3,400
-14,Arjun Chavan,86,85,83,AI Researcher,VJTI,TensorFlow / NLP,LLM RAG Pipeline,Published IEEE Paper,8.9,1579,3,400
-15,Meera Nambiar,83,88,84,Full Stack Dev,COEP,MERN Stack,Hospital Management Portal,Open Source Contributor,8.7,1578,3,400
-17,Neha Gupte,82,86,83,UI/UX Designer,Thadomal Shahani,Figma / Adobe XD,Crypto Wallet UX Redesign,Dribbble Featured,8.8,1524,3,400
-18,Karan Bansal,84,83,82,Data Engineer,SIES GST,Apache Spark / SQL,ETL Data Lakehouse,Analytics Intern,8.6,1512,3,400
-20,Varun Kapoor,83,80,84,Mobile Dev,DJ Sanghvi,React Native / Supabase,P2P Delivery App,2x Hackathon Runner-up,8.4,1495,3,400
-19,Sneha Pillai,81,85,82,DevOps Engineer,VESIT,CI/CD / Linux,Multi-Cloud Deployments,Linux Foundation Scholar,8.7,1484,3,400
-21,Aniket Shinde,80,84,81,Frontend Dev,SPIT,React / CSS Animations,Gamified Task Manager,Frontend Lead @ CSI,8.5,1444,3,400
-22,Kriti Saxena,82,81,80,Backend Dev,VJTI,Spring Boot / MySQL,Banking API Gateway,Fintech Enthusiast,8.6,1424,3,400
-23,Harsh Patel,79,83,81,Full Stack Dev,COEP,FastAPI / Svelte,Smart Inventory SaaS,Freelance Web Dev,8.3,1417,4,200
-24,Shruti Kale,81,80,79,AI / Data Dev,K.J. Somaiya,Python / Streamlit,Customer Sentiment Engine,DataCamp Certified,8.5,1367,4,200
-25,Pranav More,78,82,80,Cloud & SysAdmin,Thadomal Shahani,Linux / Docker,Home Lab Cluster,DevOps Club Core,8.2,1366,4,200
-26,Ritu Shah,80,79,80,UI/UX & Frontend,SIES GST,Figma / HTML5/CSS3,E-Commerce Redesign,UI/UX Designer @ ACM,8.4,1362,4,200
-28,Divya Prabhu,79,78,80,Quality & Test,DJ Sanghvi,Selenium / PyTest,Automated Testing Suite,QA Engineer Intern,8.3,1331,4,200
-27,Gaurav Dubey,77,81,79,Web Developer,VESIT,Node.js / Express,Campus Event Booking,Webmaster @ Rotaract,8.1,1303,4,200
-30,Shreya Bhat,78,77,79,Frontend Dev,VJTI,React / TypeScript,Portfolio Builder SaaS,Design Enthusiast,8.4,1261,4,200
-29,Nikhil Kadam,76,80,78,Backend Dev,SPIT,Go / PostgreSQL,Chat Server with WebSockets,Hackathon Participant,8.2,1234,4,200
-32,Anushka Roy,77,76,78,Full Stack Dev,K.J. Somaiya,Django / React,Alumni Connect Portal,Campus Tech Team,8.2,1190,4,200
-31,Omkar Jadhav,75,79,77,Database Dev,COEP,PostgreSQL / MongoDB,Query Optimization Engine,DBA Club Member,8.0,1149,4,200
-34,Simran Kaur,76,75,77,Frontend Dev,SIES GST,JavaScript / Bootstrap,Event Landing Pages,Web Dev Enthusiast,8.1,1106,4,200
-33,Tushar Sawant,74,78,76,Systems & Embedded,Thadomal Shahani,Arduino / C++,Smart Waste Monitoring,IoT Club Member,7.9,1039,4,200
-36,Zoya Khan,75,74,76,UI/UX Associate,DJ Sanghvi,Figma / Canvasing,Community Forum Design,Graphic Design Lead,8.0,963,4,200
-35,Manish Pandey,73,77,75,Python Developer,VESIT,Python / Flask,Automated Email Scheduler,Python Club Member,7.8,864,4,200
+id,name,aptitude,gd,profile,role,college,rating,tier,base_price,skill1,skill2,skill3,cgpa
+1,Aarav Sharma,96,92,95,Full Stack Lead,SIES GST,2176,1,1000,React,FastAPI,SQL,9.4
+2,Ananya Iyer,94,95,92,AI / ML Engineer,SIES GST,2077,1,1000,PyTorch,OpenCV,SQL,9.6
+4,Diya Deshmukh,95,90,90,UI/UX & Pitch Lead,DJ Sanghvi,1947,1,1000,Figma,Next.js,SQL,9.3
+3,Rohan Kulkarni,91,89,94,Cloud & DevOps,VESIT,1917,1,1000,Go,Kubernetes,SQL,9.1
+5,Vikram Malhotra,88,94,89,Backend Architect,SPIT,1852,1,1000,Rust,PostgreSQL,SQL,8.9
+7,Tanvi Patil,89,91,88,Data Scientist,COEP,1833,2,600,Pandas,Scikit-Learn,SQL,9.2
+6,Ishaan Joshi,90,87,91,Mobile Specialist,VJTI,1827,2,600,Flutter,Firebase,SQL,9.0
+8,Kabir Mehta,92,86,87,Cybersecurity Lead,K.J. Somaiya,1791,2,600,Wireshark,Python,SQL,8.8
+9,Sanya Verma,86,92,85,Full Stack Dev,Thadomal Shahani,1735,2,600,Next.js,Node.js,SQL,8.7
+10,Aditya Nair,87,88,86,IoT & Systems,SIES GST,1734,2,600,C++,ESP32,SQL,8.9
+12,Siddharth Rao,88,84,85,Backend Engineer,DJ Sanghvi,1682,2,600,Django,Redis,SQL,8.8
+11,Pooja Hegde,85,89,84,Frontend Engineer,VESIT,1675,2,600,Vue.js,TailwindCSS,SQL,8.6
+13,Rhea Sen,84,87,86,Product & Pitch,SPIT,1674,2,600,Product,Wireframing,SQL,9.1
+16,Yash Singhania,85,82,86,Cloud Architect,K.J. Somaiya,1638,2,600,Terraform,Docker,SQL,8.5
+14,Arjun Chavan,86,85,83,AI Researcher,VJTI,1634,3,400,TensorFlow,NLP,SQL,8.9
+15,Meera Nambiar,83,88,84,Full Stack Dev,COEP,1633,3,400,MERN Stack,React,SQL,8.7
+17,Neha Gupte,82,86,83,UI/UX Designer,Thadomal Shahani,1586,3,400,Figma,Adobe XD,SQL,8.8
+18,Karan Bansal,84,83,82,Data Engineer,SIES GST,1576,3,400,Apache Spark,SQL,SQL,8.6
+19,Sneha Pillai,81,85,82,DevOps Engineer,VESIT,1552,3,400,CI,CD,SQL,8.7
+20,Varun Kapoor,83,80,84,Mobile Dev,DJ Sanghvi,1551,3,400,React Native,Supabase,SQL,8.4
+21,Aniket Shinde,80,84,81,Frontend Dev,SPIT,1517,3,400,React,CSS Animations,SQL,8.5
+23,Harsh Patel,79,83,81,Full Stack Dev,COEP,1492,3,400,FastAPI,Svelte,SQL,8.3
+22,Kriti Saxena,82,81,80,Backend Dev,VJTI,1487,3,400,Spring Boot,MySQL,SQL,8.6
+25,Pranav More,78,82,80,Cloud & SysAdmin,Thadomal Shahani,1437,3,400,Linux,Docker,SQL,8.2
+26,Ritu Shah,80,79,80,UI/UX & Frontend,SIES GST,1432,3,400,Figma,HTML5,SQL,8.4
+24,Shruti Kale,81,80,79,AI / Data Dev,K.J. Somaiya,1430,3,400,Python,Streamlit,SQL,8.5
+38,Adit Kothari,79,77,81,Full Stack Dev,DJ Sanghvi,1414,3,400,Next.js,GraphQL,SQL,8.4
+28,Divya Prabhu,79,78,80,Quality & Test,DJ Sanghvi,1402,4,200,Selenium,PyTest,SQL,8.3
+37,Kavya Menon,76,82,80,Cloud Engineer,SIES GST,1392,4,200,AWS,Terraform,SQL,8.3
+27,Gaurav Dubey,77,81,79,Web Developer,VESIT,1372,4,200,Node.js,Express,SQL,8.1
+41,Pooja Shenoy,77,78,80,UI/UX Engineer,COEP,1358,4,200,Figma,TailwindCSS,SQL,8.3
+39,Sanaya Deshpande,78,80,78,Mobile Engineer,SPIT,1352,4,200,Swift,SwiftUI,SQL,8.2
+30,Shreya Bhat,78,77,79,Frontend Dev,VJTI,1330,4,200,React,TypeScript,SQL,8.4
+40,Aryan Jain,75,81,79,Backend Engineer,VJTI,1313,4,200,Go,gRPC,SQL,8.1
+29,Nikhil Kadam,76,80,78,Backend Dev,SPIT,1298,4,200,Go,PostgreSQL,SQL,8.2
+43,Nisha Sawant,76,79,78,Data Analyst,Thadomal Shahani,1278,4,200,Python,PowerBI,SQL,8.0
+32,Anushka Roy,77,76,78,Full Stack Dev,K.J. Somaiya,1254,4,200,Django,React,SQL,8.2
+31,Omkar Jadhav,75,79,77,Database Dev,COEP,1202,4,200,PostgreSQL,MongoDB,SQL,8.0
+34,Simran Kaur,76,75,77,Frontend Dev,SIES GST,1163,4,200,JavaScript,Bootstrap,SQL,8.1
+44,Rohan Bakshi,75,77,76,Web Developer,K.J. Somaiya,1098,4,200,React,Node.js,SQL,7.8
+33,Tushar Sawant,74,78,76,Systems & Embedded,Thadomal Shahani,1082,4,200,Arduino,C++,SQL,7.9
+42,Tarun Pillai,74,76,77,DevOps Specialist,VESIT,1048,4,200,Docker,CI,SQL,7.9
+36,Zoya Khan,75,74,76,UI/UX Associate,DJ Sanghvi,1016,4,200,Figma,Canvasing,SQL,8.0
+35,Manish Pandey,73,77,75,Python Developer,VESIT,908,4,200,Python,Flask,SQL,7.8

@@ -51,14 +51,21 @@ def create_state(base_dir: Path) -> AppState:
     # Always start fresh: delete old database so the auction resets on
     # every server restart instead of resuming from saved state.
     if db_path.exists():
-        db_path.unlink()
+        try:
+            db_path.unlink()
+        except OSError:
+            pass
     # Also remove WAL and SHM files left by SQLite.
     for suffix in (".db-wal", ".db-shm"):
         wal_path = db_path.with_suffix(suffix)
         if wal_path.exists():
-            wal_path.unlink()
+            try:
+                wal_path.unlink()
+            except OSError:
+                pass
 
     store = Store(db_path)
+    store.clear_state()
 
     # Teams/login codes are always read from teams.csv if available.
     teams = _load_if_exists(teams_csv, load_teams)
