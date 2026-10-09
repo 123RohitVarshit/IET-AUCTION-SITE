@@ -1,45 +1,41 @@
 id,name,aptitude,gd,profile,role,college,skill1,skill2,skill3,cgpa
-1,Aarav Sharma,96,92,95,Full Stack Lead,SIES GST,React,FastAPI,SQL,9.4
-2,Ananya Iyer,94,95,92,AI / ML Engineer,SIES GST,PyTorch,OpenCV,SQL,9.6
-3,Rohan Kulkarni,91,89,94,Cloud & DevOps,VESIT,Go,Kubernetes,SQL,9.1
-4,Diya Deshmukh,95,90,90,UI/UX & Pitch Lead,DJ Sanghvi,Figma,Next.js,SQL,9.3
-5,Vikram Malhotra,88,94,89,Backend Architect,SPIT,Rust,PostgreSQL,SQL,8.9
-6,Ishaan Joshi,90,87,91,Mobile Specialist,VJTI,Flutter,Firebase,SQL,9.0
-7,Tanvi Patil,89,91,88,Data Scientist,COEP,Pandas,Scikit-Learn,SQL,9.2
-8,Kabir Mehta,92,86,87,Cybersecurity Lead,K.J. Somaiya,Wireshark,Python,SQL,8.8
-9,Sanya Verma,86,92,85,Full Stack Dev,Thadomal Shahani,Next.js,Node.js,SQL,8.7
-10,Aditya Nair,87,88,86,IoT & Systems,SIES GST,C++,ESP32,SQL,8.9
-11,Pooja Hegde,85,89,84,Frontend Engineer,VESIT,Vue.js,TailwindCSS,SQL,8.6
-12,Siddharth Rao,88,84,85,Backend Engineer,DJ Sanghvi,Django,Redis,SQL,8.8
-13,Rhea Sen,84,87,86,Product & Pitch,SPIT,Product,Wireframing,SQL,9.1
-14,Arjun Chavan,86,85,83,AI Researcher,VJTI,TensorFlow,NLP,SQL,8.9
-15,Meera Nambiar,83,88,84,Full Stack Dev,COEP,MERN Stack,React,SQL,8.7
-16,Yash Singhania,85,82,86,Cloud Architect,K.J. Somaiya,Terraform,Docker,SQL,8.5
-17,Neha Gupte,82,86,83,UI/UX Designer,Thadomal Shahani,Figma,Adobe XD,SQL,8.8
-18,Karan Bansal,84,83,82,Data Engineer,SIES GST,Apache Spark,SQL,SQL,8.6
-19,Sneha Pillai,81,85,82,DevOps Engineer,VESIT,CI,CD,SQL,8.7
-20,Varun Kapoor,83,80,84,Mobile Dev,DJ Sanghvi,React Native,Supabase,SQL,8.4
-21,Aniket Shinde,80,84,81,Frontend Dev,SPIT,React,CSS Animations,SQL,8.5
-22,Kriti Saxena,82,81,80,Backend Dev,VJTI,Spring Boot,MySQL,SQL,8.6
-23,Harsh Patel,79,83,81,Full Stack Dev,COEP,FastAPI,Svelte,SQL,8.3
-24,Shruti Kale,81,80,79,AI / Data Dev,K.J. Somaiya,Python,Streamlit,SQL,8.5
-25,Pranav More,78,82,80,Cloud & SysAdmin,Thadomal Shahani,Linux,Docker,SQL,8.2
-26,Ritu Shah,80,79,80,UI/UX & Frontend,SIES GST,Figma,HTML5,SQL,8.4
-27,Gaurav Dubey,77,81,79,Web Developer,VESIT,Node.js,Express,SQL,8.1
-28,Divya Prabhu,79,78,80,Quality & Test,DJ Sanghvi,Selenium,PyTest,SQL,8.3
-29,Nikhil Kadam,76,80,78,Backend Dev,SPIT,Go,PostgreSQL,SQL,8.2
-30,Shreya Bhat,78,77,79,Frontend Dev,VJTI,React,TypeScript,SQL,8.4
-31,Omkar Jadhav,75,79,77,Database Dev,COEP,PostgreSQL,MongoDB,SQL,8.0
-32,Anushka Roy,77,76,78,Full Stack Dev,K.J. Somaiya,Django,React,SQL,8.2
-33,Tushar Sawant,74,78,76,Systems & Embedded,Thadomal Shahani,Arduino,C++,SQL,7.9
-34,Simran Kaur,76,75,77,Frontend Dev,SIES GST,JavaScript,Bootstrap,SQL,8.1
-35,Manish Pandey,73,77,75,Python Developer,VESIT,Python,Flask,SQL,7.8
-36,Zoya Khan,75,74,76,UI/UX Associate,DJ Sanghvi,Figma,Canvasing,SQL,8.0
-37,Kavya Menon,76,82,80,Cloud Engineer,SIES GST,AWS,Terraform,SQL,8.3
-38,Adit Kothari,79,77,81,Full Stack Dev,DJ Sanghvi,Next.js,GraphQL,SQL,8.4
-39,Sanaya Deshpande,78,80,78,Mobile Engineer,SPIT,Swift,SwiftUI,SQL,8.2
-40,Aryan Jain,75,81,79,Backend Engineer,VJTI,Go,gRPC,SQL,8.1
-41,Pooja Shenoy,77,78,80,UI/UX Engineer,COEP,Figma,TailwindCSS,SQL,8.3
-42,Tarun Pillai,74,76,77,DevOps Specialist,VESIT,Docker,CI,SQL,7.9
-43,Nisha Sawant,76,79,78,Data Analyst,Thadomal Shahani,Python,PowerBI,SQL,8.0
-44,Rohan Bakshi,75,77,76,Web Developer,K.J. Somaiya,React,Node.js,SQL,7.8
+1,Sri Muthu Lakshmanan,25,44,32.6,,,,,,
+2,Priyanka Kailashchand Saini ,30,34,31.6,,SIES Graduate School of Technology ,Pyrhon,Backend,Deployment ,
+3,SATHYA PILLAI,25,41,31.4,,SIESGST,Leadership ,AI prompting,Backend,9.075
+4,Tejas Chatne,36,24,31.2,,SIES GST,Good Communication ,Leadership Quality,can handle difficult task,8.7
+5,NIMESH KOR,25,40,31,,Sies graduation school of technology ,Making a website ,Communication ,Python,9
+6,Ayushi Sawant ,24,41,30.8,,SIES GST Nerul ,Leadership ,Playing chess ,Quick learner ,7.93
+7,Soham Lone,30,32,30.8,,SIES Graduate School Of Technology,Computer Vision and VLMs,RAG and LLMs,Data modelling and Visualization,9.2
+8,Mohammed Zidaan Mansoori,22,43,30.4,,HSNCU SOET,Prompt Engineering,Communication and Persuasion,Marketing,0
+9,Gershom Jebaraj ,29,32,30.2,,SIES GST,Leadership ,Coding ,web dev,8.8
+10,Siya Agarwal,19,44,29,,,,,,
+11,Vivek ,29,29,29,,,,,,
+12,Karthik Raja Chinnadurai ,21,39,28.2,,Siesgst,Editing ,Script writing ,Cinematography,
+13,Aarya Patil ,22,36,27.6,,Sies gst,Ai promting , Backend ,"Data analysis ,adaptability ",9.5
+14,Aastha patil,25,31,27.4,,Sies,Backend ,Ai promting ,UI/ux,9.5
+15,Sanskar patil,23,34,27.4,,SIES graduate school of technology ,Communication ,Adaptive,Programming ,
+16,Anshul Harish Vethekar,25,29,26.6,,Sies GST,Building AI Powered Applications,Python Programming and Prompt Engineering,Team Leadership and Presentation Skills,0
+17,Vidya Thavasi Pillai,20,36,26.4,,SIES,"C++, c",Creative interface(Ux/Ui) ,Problem solving,9.15
+18,Saravanan Mudaliyar ,26,26,26,,Sies gst,Python,Web development ,C,
+19,Abhishek Gupta ,19,36,25.8,,Terna engineering college ,Front end developer ,C program ,Good communication ,0
+20,Soham Dabade,14,43,25.6,,SIES GST,Communication and Persuasion ,Critical Thinking and Problem solving ,"UI, backend and excellent at writing prompts ",8.3
+21,Aparna Pillai,14,42,25.2,,Sies Gst,"Good with Promoting, design, and creative ",innovative ,Have good talking Skills,7.7
+22,Divya ,16,39,25.2,,,,,,
+23,Om Ravindra Patil,20,32,24.8,,SIES GST,Hands On Experience Full Stack Developer [Mern Stack] ,"I communicate clearly, present with confidence, and lead teams effectively.",Blockchain Intern At Backpack [International]Startup,9
+24,Kanchan nishad ,18,35,24.8,,Sies gst ,"Backend ,fastapi,js,node.js","Hardware integration,iot familiar with raspberry Pi integration ","Frontend, react ,react native",8.3
+25,Arya Marathe,15,38,24.2,,SIES GST,Web development,Data Structures ,Good presentation and communication skills,7.7
+26,Manikaraj Anburaj,17,34,23.8,,SIES GST,Backend Development & DevOps Engineering,Game Development (Unreal Engine),Research & Technical Presentation,7.5
+27,DEEPAK MAURYA ,14,37,23.2,,Terna engineering college ,Python,HTML,CSS,0
+28,Keshav,21,26,23,,SIES GST,Software,Hardware,Creative,
+29,Duraipandi ,17,32,23,,,,,,
+30,Balaji Nadar ,13,34,21.4,,Sies graduate school of technology ,Python,C,Sql,
+31,Rayal Reenash Nadar ,17,26,20.6,,SIES Graduate School Of Technology ,Python,Communication skills ,SQL,
+32,Nethra Elangovan ,13,25,17.8,,SIES GST,Communication ,Team work ,Leader ship ,8
+33,Santhiya Dharmaraj ,23,0,13.8,,Sies gst,Creativity ,Coding,Speaking ,7.9
+34,Shubham Chavan ,22,0,13.2,,Sies Graduate School Of Technology ,Python,Java,C#,
+35,Santosh Elango ,10,15,12,,Sies gst,Coding,Team work,Leadership ,8.9
+36,Sudhanshu Patil,14,6,10.8,,"Bharatiya vidyapeeth college of engineering, navi mumbai",Leadership,Kindness,Confident,-
+37,Karthik Sundar,18,0,10.8,,SIES GRADUATE SCHOOL OF TECHNOLOGY ,N/A,N/A,N/A,7
+38,Humaira Khan ,16,0,9.6,,Sies gst,Coding ,Project management ,Idea generation ,9.3
+39,Himanshu Dinesh Madhavi,16,0,9.6,,"SIES GST, nerul","Strong foundation in libraries like pandas,numpy and scikitLearn",Experienced in handling I2C buses,Experience  in building Embedded system,9.3
+40,Shamkumar Palaraman ,15,0,9,,SIES Graduate School of Technology ,Leadership,Communication ,Problem Solving,7.2
