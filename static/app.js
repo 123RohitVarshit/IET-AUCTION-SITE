@@ -261,19 +261,79 @@ function renderSnapshot(snapshot) {
         return `
         <div class="franchise-card-brutal team-border-${t.id} ${isLeader ? 'is-leader' : ''}">
           <div class="franchise-top">
-    if ($('captain-team-name')) {
-      const acronym = getTeamAcronym(view.id, view.team);
-      $('captain-team-name').innerHTML = `
-        <span style="display:inline-flex; align-items:center; gap:6px;">
-          <span class="team-monogram-pill team-badge-${view.id || 1}" style="font-size:10px; padding:2px 6px;">${acronym}</span>
-          ${view.team || 'MY FRANCHISE'}
-        </span>
+            <div class="franchise-title-group">
+              <span class="team-monogram-pill team-badge-${t.id}">${getTeamAcronym(t.id, t.name)}</span>
+              <h3 class="franchise-name">${t.name}</h3>
+            </div>
+            <span class="franchise-roster-pill ${isFull ? 'is-full' : ''}">${t.roster} / ${rosterSize}</span>
+          </div>
+          <div class="franchise-purse-row">
+            <span class="franchise-purse-label">PURSE:</span>
+            <strong class="franchise-purse-val">${money(t.purse)}</strong>
+          </div>
+          <div class="franchise-squad-chips">
+            ${squadContent}
+          </div>
+        </div>
       `;
+      })
+      .join('');
+
+    if ($('topbar-pool-badge')) {
+      $('topbar-pool-badge').textContent = `${snapshot.teams.length} TEAMS`;
     }
-    if ($('captain-user-name')) $('captain-user-name').textContent = view.captain || '—';
-    if ($('captain-connection')) $('captain-connection').textContent = view.captain
-      ? `SIGNED IN: ${view.team} • 👑 CAPTAIN: ${view.captain}`
-      : (view.team ? `SIGNED IN: ${view.team}` : 'ONLINE');
+    if ($('stage-squads-title')) {
+      $('stage-squads-title').textContent = `${snapshot.teams.length} SQUADS // 1 PURSE (10,000 PTS)`;
+    }
+    if ($('stage-target-badge')) {
+      $('stage-target-badge').textContent = `TARGET: ${snapshot.roster_size || 4} PLAYERS / TEAM`;
+    }
+    populateTeamSelects(snapshot.teams);
+  }
+
+  const upcomingNode = $('stage-upcoming');
+  if (upcomingNode) {
+    if (snapshot.upcoming?.length) {
+      upcomingNode.innerHTML = snapshot.upcoming
+        .map(
+          (u) => `
+        <div class="upcoming-chip-box">
+          <div class="u-tier">T${u.tier} • ${Number(u.rating).toLocaleString()} PTS</div>
+          <div class="u-name">${u.name}</div>
+          <div style="font-size:9px; color:#64748B;">${u.role || 'Cricket Prospect'}</div>
+        </div>
+      `
+        )
+        .join('');
+    } else {
+      upcomingNode.innerHTML = '<div class="upcoming-chip-box">No more queued players.</div>';
+    }
+  }
+
+  renderAdmin(snapshot);
+
+  if (state.captainView) {
+    renderCaptainView(state.captainView);
+  }
+}
+
+function renderCaptainView(view) {
+  if (!view) return;
+  state.captainView = view;
+
+  if ($('captain-team-name')) {
+    const acronym = getTeamAcronym(view.id, view.team);
+    $('captain-team-name').innerHTML = `
+      <span style="display:inline-flex; align-items:center; gap:6px;">
+        <span class="team-monogram-pill team-badge-${view.id || 1}" style="font-size:10px; padding:2px 6px;">${acronym}</span>
+        ${view.team || 'MY FRANCHISE'}
+      </span>
+    `;
+  }
+  if ($('captain-user-name')) $('captain-user-name').textContent = view.captain || '—';
+  if ($('captain-connection')) $('captain-connection').textContent = view.captain
+    ? `SIGNED IN: ${view.team} • 👑 CAPTAIN: ${view.captain}`
+    : (view.team ? `SIGNED IN: ${view.team}` : 'ONLINE');
   if ($('captain-purse')) $('captain-purse').textContent = money(view.purse);
   if ($('captain-max-bid')) $('captain-max-bid').textContent = money(view.max_bid);
   if ($('captain-roster-count')) $('captain-roster-count').textContent = `${view.roster} / ${view.roster_size || 4} DRAFTED`;
@@ -706,6 +766,7 @@ function bindEvents() {
         if ($('admin-console')) $('admin-console').hidden = false;
         if ($('admin-connection')) $('admin-connection').textContent = 'CONTROL ROOM UNLOCKED';
         setMessage('admin-login-message', '');
+        updateExportLinks();
         refreshSnapshot();
         loadSetup();
         loadAdminCandidates();
@@ -831,6 +892,15 @@ function bindEvents() {
   }
 }
 
+function updateExportLinks() {
+  const pin = state.adminPin;
+  if (!pin) return;
+  document.querySelectorAll('a[href^="/api/admin/export/"]').forEach((a) => {
+    const base = a.getAttribute('href').split('?')[0];
+    a.setAttribute('href', `${base}?pin=${encodeURIComponent(pin)}`);
+  });
+}
+
 function route() {
   const hash = location.hash.replace('#', '') || 'stage';
 
@@ -849,6 +919,7 @@ function route() {
   if (hash === 'admin' && state.adminPin) {
     if ($('admin-login-card')) $('admin-login-card').hidden = true;
     if ($('admin-console')) $('admin-console').hidden = false;
+    updateExportLinks();
     loadSetup();
     loadAdminCandidates();
   }

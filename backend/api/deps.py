@@ -2,7 +2,8 @@
 FastAPI dependencies.
 """
 
-from fastapi import Depends, Header, HTTPException, Request
+from typing import Optional
+from fastapi import Depends, Header, HTTPException, Query, Request
 
 from .security import verify_admin_pin
 
@@ -14,8 +15,10 @@ def get_state(request: Request):
 def require_admin(
     state=Depends(get_state),
     x_admin_pin: str = Header(default=""),
+    pin: Optional[str] = Query(default=None),
 ):
-    if not verify_admin_pin(x_admin_pin, state.admin_pin):
+    provided = x_admin_pin or pin or ""
+    if not verify_admin_pin(provided, state.admin_pin):
         raise HTTPException(status_code=401, detail="Invalid admin PIN")
 
     return True

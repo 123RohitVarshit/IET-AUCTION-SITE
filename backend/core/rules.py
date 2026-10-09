@@ -82,7 +82,7 @@ def max_bid(purse: int, roster_count: int, cfg) -> int:
        captains do not burn all their money on just a few players.
     2. A team can always afford to fill all remaining roster slots at floor price.
     """
-    min_purse = getattr(cfg, "min_purse", 1000)
+    min_purse = getattr(cfg, "min_purse", 0)
     slots_reserved = empty_slots_after_buy(roster_count, cfg) * cfg.floor_price
     reserved = min_purse + slots_reserved
     return max(0, purse - reserved)
@@ -163,8 +163,8 @@ def check_bid(
     if price > purse:
         return Verdict(False, "PURSE", f"Not enough purse ({purse}).")
 
-    min_p = getattr(cfg, "min_purse", 1000)
-    if (purse - price) < min_p:
+    min_p = getattr(cfg, "min_purse", 0)
+    if min_p > 0 and (purse - price) < min_p:
         return Verdict(
             False,
             "RESERVE",
@@ -175,17 +175,16 @@ def check_bid(
 
     if price > mb:
         n = empty_slots_after_buy(roster_count, cfg)
-        if n > 0:
+        if min_p > 0:
             return Verdict(
                 False,
                 "RESERVE",
                 f"Max bid is {mb}: keep {min_p} minimum purse plus {cfg.floor_price} for each of your {n} other empty slot(s).",
             )
-        else:
-            return Verdict(
-                False,
-                "RESERVE",
-                f"Max bid is {mb}: must maintain a minimum purse of {min_p}.",
-            )
+        return Verdict(
+            False,
+            "RESERVE",
+            f"Max bid is {mb}: keep {cfg.floor_price} for each of your {n} other empty slot(s).",
+        )
 
     return Verdict(True, "OK", "Bid accepted.")

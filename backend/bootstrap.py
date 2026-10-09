@@ -92,7 +92,7 @@ def create_state(base_dir: Path) -> AppState:
         window_seconds=1.0,
     )
 
-    admin_pin = os.getenv("ADMIN_PIN", "change-me")
+    admin_pin = os.getenv("ADMIN_PIN", "1234@")
 
     return AppState(
         cfg=cfg,
