@@ -48,26 +48,6 @@ const api = async (path, options = {}) => {
   return body;
 };
 
-const getTeamAcronym = (teamId, teamName) => {
-  const acronymsById = {
-    1: 'CSK',
-    2: 'RCB',
-    3: 'MI',
-    4: 'RR',
-    5: 'KKR',
-    6: 'GT',
-    7: 'SRH',
-    8: 'DC',
-  };
-  if (teamId && acronymsById[teamId]) return acronymsById[teamId];
-  if (!teamName) return 'TM';
-  const words = teamName.trim().split(/\s+/);
-  if (words.length >= 2) {
-    return words.map((w) => w[0]).join('').toUpperCase().slice(0, 4);
-  }
-  return teamName.slice(0, 3).toUpperCase();
-};
-
 const setMessage = (id, message = '', good = false) => {
   const node = $(id);
   if (node) {
@@ -163,13 +143,10 @@ function renderSnapshot(snapshot) {
     const tags = [];
     if (profile.batting_style) tags.push(`Batting: ${profile.batting_style}`);
     if (profile.bowling_style && profile.bowling_style !== 'None') tags.push(`Bowling: ${profile.bowling_style}`);
-    if (profile.skill1) tags.push(`Skill: ${profile.skill1}`);
-    if (profile.skill2) tags.push(`Skill: ${profile.skill2}`);
-    if (profile.skill3) tags.push(`Skill: ${profile.skill3}`);
-    if (profile.cgpa) tags.push(`CGPA: ${profile.cgpa}`);
+    if (profile.skill) tags.push(`Skill: ${profile.skill}`);
 
     for (const [k, v] of Object.entries(profile)) {
-      if (!['role', 'college', 'aptitude', 'gd', 'batting_style', 'bowling_style', 'skill', 'skill1', 'skill2', 'skill3', 'cgpa'].includes(k) && v) {
+      if (!['role', 'college', 'aptitude', 'gd', 'batting_style', 'bowling_style', 'skill'].includes(k) && v) {
         tags.push(`${k.replace('_', ' ')}: ${v}`);
       }
     }
@@ -261,19 +238,68 @@ function renderSnapshot(snapshot) {
         return `
         <div class="franchise-card-brutal team-border-${t.id} ${isLeader ? 'is-leader' : ''}">
           <div class="franchise-top">
-    if ($('captain-team-name')) {
-      const acronym = getTeamAcronym(view.id, view.team);
-      $('captain-team-name').innerHTML = `
-        <span style="display:inline-flex; align-items:center; gap:6px;">
-          <span class="team-monogram-pill team-badge-${view.id || 1}" style="font-size:10px; padding:2px 6px;">${acronym}</span>
-          ${view.team || 'MY FRANCHISE'}
-        </span>
+            <h3 class="franchise-name">${t.name}</h3>
+            <span class="franchise-roster-pill ${isFull ? 'is-full' : ''}">${t.roster} / ${rosterSize}</span>
+          </div>
+          <div class="franchise-purse-row">
+            <span class="franchise-purse-label">PURSE:</span>
+            <strong class="franchise-purse-val">${money(t.purse)}</strong>
+          </div>
+          <div class="franchise-squad-chips">
+            ${squadContent}
+          </div>
+        </div>
       `;
+      })
+      .join('');
+
+    if ($('topbar-pool-badge')) {
+      $('topbar-pool-badge').textContent = `${snapshot.teams.length} TEAMS`;
     }
-    if ($('captain-user-name')) $('captain-user-name').textContent = view.captain || '—';
-    if ($('captain-connection')) $('captain-connection').textContent = view.captain
-      ? `SIGNED IN: ${view.team} • 👑 CAPTAIN: ${view.captain}`
-      : (view.team ? `SIGNED IN: ${view.team}` : 'ONLINE');
+    if ($('stage-squads-title')) {
+      $('stage-squads-title').textContent = `${snapshot.teams.length} SQUADS // 1 PURSE (10,000 PTS)`;
+    }
+    if ($('stage-target-badge')) {
+      $('stage-target-badge').textContent = `TARGET: ${snapshot.roster_size || 4} PLAYERS / TEAM`;
+    }
+    populateTeamSelects(snapshot.teams);
+  }
+
+  const upcomingNode = $('stage-upcoming');
+  if (upcomingNode) {
+    if (snapshot.upcoming?.length) {
+      upcomingNode.innerHTML = snapshot.upcoming
+        .map(
+          (u) => `
+        <div class="upcoming-chip-box">
+          <div class="u-tier">T${u.tier} • ${Number(u.rating).toLocaleString()} PTS</div>
+          <div class="u-name">${u.name}</div>
+          <div style="font-size:9px; color:#64748B;">${u.role || 'Cricket Prospect'}</div>
+        </div>
+      `
+        )
+        .join('');
+    } else {
+      upcomingNode.innerHTML = '<div class="upcoming-chip-box">No more queued players.</div>';
+    }
+  }
+
+  renderAdmin(snapshot);
+
+  if (state.captainView) {
+    renderCaptainView(state.captainView);
+  }
+}
+
+function renderCaptainView(view) {
+  if (!view) return;
+  state.captainView = view;
+
+  if ($('captain-team-name')) $('captain-team-name').textContent = view.team || 'MY FRANCHISE';
+  if ($('captain-user-name')) $('captain-user-name').textContent = view.captain || '—';
+  if ($('captain-connection')) $('captain-connection').textContent = view.captain
+    ? `SIGNED IN: ${view.team} • 👑 CAPTAIN: ${view.captain}`
+    : (view.team ? `SIGNED IN: ${view.team}` : 'ONLINE');
   if ($('captain-purse')) $('captain-purse').textContent = money(view.purse);
   if ($('captain-max-bid')) $('captain-max-bid').textContent = money(view.max_bid);
   if ($('captain-roster-count')) $('captain-roster-count').textContent = `${view.roster} / ${view.roster_size || 4} DRAFTED`;

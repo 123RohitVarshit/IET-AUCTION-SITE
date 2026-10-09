@@ -75,21 +75,16 @@ def max_bid(purse: int, roster_count: int, cfg) -> int:
     """
     Reserve formula:
 
-        Max bid = purse - min_purse - (empty slots after this purchase * floor price)
+        Max bid = purse - (empty slots after this purchase * floor price)
 
-    Guarantees:
-    1. A minimum purse guardrail (default 1000) is maintained at all times so
-       captains do not burn all their money on just a few players.
-    2. A team can always afford to fill all remaining roster slots at floor price.
+    This guarantees that a team can always afford to fill all roster slots.
     """
-    min_purse = getattr(cfg, "min_purse", 1000)
-    slots_reserved = empty_slots_after_buy(roster_count, cfg) * cfg.floor_price
-    reserved = min_purse + slots_reserved
+    reserved = empty_slots_after_buy(roster_count, cfg) * cfg.floor_price
     return max(0, purse - reserved)
 
 
 # Fixed jump increments captains can add on top of the minimum next price.
-BID_INCREMENTS: List[int] = [100, 150, 200, 250, 500]
+BID_INCREMENTS: List[int] = [250, 500, 1000, 1500]
 
 
 def bid_options(
@@ -138,8 +133,8 @@ def check_bid(
     Those are checked by the auction state machine.
 
     Accepted prices: any amount >= next_price(current_bid, base) that also
-    does not exceed the team's max_bid. This allows captains to place
-    jump bids (+100, +150, +200, +250, +500) instead of only the minimum increment.
+    does not exceed the team's max_bid.  This allows captains to place
+    jump bids (+250, +500, +1000, +1500) instead of only the minimum increment.
     """
 
     if price is None or price <= 0:
@@ -163,29 +158,14 @@ def check_bid(
     if price > purse:
         return Verdict(False, "PURSE", f"Not enough purse ({purse}).")
 
-    min_p = getattr(cfg, "min_purse", 1000)
-    if (purse - price) < min_p:
-        return Verdict(
-            False,
-            "RESERVE",
-            f"Bid of {price} would leave purse at {purse - price}, below the {min_p} minimum purse guardrail.",
-        )
-
     mb = max_bid(purse, roster_count, cfg)
 
     if price > mb:
         n = empty_slots_after_buy(roster_count, cfg)
-        if n > 0:
-            return Verdict(
-                False,
-                "RESERVE",
-                f"Max bid is {mb}: keep {min_p} minimum purse plus {cfg.floor_price} for each of your {n} other empty slot(s).",
-            )
-        else:
-            return Verdict(
-                False,
-                "RESERVE",
-                f"Max bid is {mb}: must maintain a minimum purse of {min_p}.",
-            )
+        return Verdict(
+            False,
+            "RESERVE",
+            f"Max bid is {mb}: keep {cfg.floor_price} for each of your {n} other empty slot(s).",
+        )
 
-    return Verdict(True, "OK", "Bid accepted.")
+    return Verdict(True, "OK", "Bid accepted.")

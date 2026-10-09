@@ -142,9 +142,8 @@ class Auction:
             N = len(self.cands)
             R = self.cfg.roster_size
 
-            min_p = getattr(self.cfg, "min_purse", 1000)
             purse_ok = all(
-                t.purse >= (R * self.cfg.floor_price + min_p)
+                t.purse >= R * self.cfg.floor_price
                 for t in self.teams.values()
             )
 
